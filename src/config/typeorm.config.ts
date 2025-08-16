@@ -2,9 +2,9 @@ import { TypeOrmModuleOptions } from "@nestjs/typeorm";
 
 export function TypeOrmConfig(): TypeOrmModuleOptions {
   return {
-    type: 'postgres',
+    type: 'mysql',
     host: 'localhost',
-    port: 5433,
+    port: 3306,
     password: 'HADIh3pn',
     username: 'postgres',
     database: 'semiSnappfood',
