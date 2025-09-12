@@ -1,8 +1,17 @@
 import { EntityEnums } from 'src/common/enums/entity-name.enum';
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToOne } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
+import { UserAddress } from './address.entity';
 
 @Entity(EntityEnums.USER)
-export class User extends BaseEntity {
+export class UserEntity extends BaseEntity {
   @Column({ nullable: true })
   full_name: string;
   @Column({ nullable: true })
@@ -21,6 +30,8 @@ export class User extends BaseEntity {
   created_at: Date;
   @CreateDateColumn({ type: 'time with time zone' })
   updated_at: Date;
-//   @OneToOne(()=>User,user=>user.agentId)
-//   subset:number
+  @OneToMany(() => UserAddress, (address) => address.user)
+  addressList: UserAddress[];
+  //   @OneToOne(()=>User,user=>user.agentId)
+  //   subset:number
 }
