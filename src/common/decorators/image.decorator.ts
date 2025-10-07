@@ -6,10 +6,11 @@ import {
   ParseFilePipe,
   UploadedFile,
 } from '@nestjs/common';
+import { ValidatorsEnum } from '../enums/validatos.enum';
 
-export const UploadingImage = (
-  fileType: string = 'image/(png|jpg|jpeg|webp)',
-  maxSize: number = 3 * 1024 * 1024,
+export const  UploadingImage = (
+  fileType: string = ValidatorsEnum.imageFileType,
+  maxSize: number = ValidatorsEnum.maxSizeCategoryImage,
 ) => {
   return UploadedFile(
     new ParseFilePipe({

@@ -13,7 +13,8 @@ exports.UserAddress = void 0;
 const entity_name_enum_1 = require("../../../common/enums/entity-name.enum");
 const typeorm_1 = require("typeorm");
 const user_entity_1 = require("./user.entity");
-let UserAddress = class UserAddress extends typeorm_1.BaseEntity {
+const base_entity_1 = require("../../../common/abstracts/base.entity");
+let UserAddress = class UserAddress extends base_entity_1.BaseEntity {
     title;
     province;
     city;
@@ -45,7 +46,7 @@ __decorate([
     __metadata("design:type", String)
 ], UserAddress.prototype, "postal_code", void 0);
 __decorate([
-    (0, typeorm_1.CreateDateColumn)({ type: 'time with time zone' }),
+    (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)
 ], UserAddress.prototype, "created_at", void 0);
 __decorate([

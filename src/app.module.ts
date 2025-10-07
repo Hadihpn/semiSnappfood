@@ -5,9 +5,18 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeOrmConfig } from './config/typeorm.config';
 import { UserModule } from './modules/user/user.module';
 import { CategoryModule } from './modules/category/category.module';
+import { ConfigModule } from '@nestjs/config';
+import { join } from 'path';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(TypeOrmConfig()), UserModule, CategoryModule],
+  imports: [
+    ConfigModule.forRoot({
+      envFilePath: join(process.cwd(), '.env'),
+    }),
+    TypeOrmModule.forRoot(TypeOrmConfig()),
+    UserModule,
+    CategoryModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

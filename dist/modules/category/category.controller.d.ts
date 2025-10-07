@@ -4,8 +4,10 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 export declare class CategoryController {
     private readonly categoryService;
     constructor(categoryService: CategoryService);
-    create(createCategoryDto: CreateCategoryDto): string;
-    findAll(): string;
+    create(createCategoryDto: CreateCategoryDto, image: Express.Multer.File): any;
+    findAll(): Promise<{
+        categories: import("./entities/category.entity").CategoryEntity[];
+    }>;
     findOne(id: string): string;
     update(id: string, updateCategoryDto: UpdateCategoryDto): string;
     remove(id: string): string;

@@ -1,5 +1,6 @@
+import { BaseEntity } from 'src/common/abstracts/base.entity';
 import { EntityEnums } from 'src/common/enums/entity-name.enum';
-import { BaseEntity, Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import {  Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity(EntityEnums.CATEGORY)
 export class CategoryEntity extends BaseEntity {
@@ -14,7 +15,7 @@ export class CategoryEntity extends BaseEntity {
   // @Column()
   // type:
   @Column({ nullable: true })
-  parentId: true;
+  parentId: number;
   @ManyToOne(() => CategoryEntity, (category) => category.children, {
     onDelete: 'CASCADE',
   })

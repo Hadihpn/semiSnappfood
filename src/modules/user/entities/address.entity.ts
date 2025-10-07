@@ -1,12 +1,12 @@
 import { EntityEnums } from 'src/common/enums/entity-name.enum';
 import {
-  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
 } from 'typeorm';
 import { UserEntity } from './user.entity';
+import { BaseEntity } from 'src/common/abstracts/base.entity';
 @Entity(EntityEnums.USERAddress)
 export class UserAddress extends BaseEntity {
   @Column()
@@ -19,7 +19,7 @@ export class UserAddress extends BaseEntity {
   address: string;
   @Column({ nullable: true })
   postal_code: string;
-  @CreateDateColumn({ type: 'time with time zone' })
+  @CreateDateColumn()
   created_at: Date;
   @Column()
   userId: number;

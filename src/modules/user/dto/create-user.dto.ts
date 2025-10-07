@@ -1,1 +1,5 @@
-export class CreateUserDto {}
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+
+export class CreateUserDto {
+ 
+}

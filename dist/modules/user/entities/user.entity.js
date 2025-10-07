@@ -13,7 +13,8 @@ exports.UserEntity = void 0;
 const entity_name_enum_1 = require("../../../common/enums/entity-name.enum");
 const typeorm_1 = require("typeorm");
 const address_entity_1 = require("./address.entity");
-let UserEntity = class UserEntity extends typeorm_1.BaseEntity {
+const base_entity_1 = require("../../../common/abstracts/base.entity");
+let UserEntity = class UserEntity extends base_entity_1.BaseEntity {
     full_name;
     last_name;
     email;
@@ -55,11 +56,11 @@ __decorate([
     __metadata("design:type", String)
 ], UserEntity.prototype, "agentId", void 0);
 __decorate([
-    (0, typeorm_1.CreateDateColumn)({ type: 'time with time zone' }),
+    (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)
 ], UserEntity.prototype, "created_at", void 0);
 __decorate([
-    (0, typeorm_1.CreateDateColumn)({ type: 'time with time zone' }),
+    (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)
 ], UserEntity.prototype, "updated_at", void 0);
 __decorate([

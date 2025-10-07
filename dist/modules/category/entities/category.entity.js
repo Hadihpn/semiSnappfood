@@ -10,9 +10,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CategoryEntity = void 0;
+const base_entity_1 = require("../../../common/abstracts/base.entity");
 const entity_name_enum_1 = require("../../../common/enums/entity-name.enum");
 const typeorm_1 = require("typeorm");
-let CategoryEntity = class CategoryEntity extends typeorm_1.BaseEntity {
+let CategoryEntity = class CategoryEntity extends base_entity_1.BaseEntity {
     title;
     slug;
     image;
@@ -40,7 +41,7 @@ __decorate([
 ], CategoryEntity.prototype, "show", void 0);
 __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", Boolean)
+    __metadata("design:type", Number)
 ], CategoryEntity.prototype, "parentId", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => CategoryEntity, (category) => category.children, {

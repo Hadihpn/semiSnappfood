@@ -1,5 +1,5 @@
-import { BaseEntity } from 'typeorm';
 import { UserAddress } from './address.entity';
+import { BaseEntity } from 'src/common/abstracts/base.entity';
 export declare class UserEntity extends BaseEntity {
     full_name: string;
     last_name: string;

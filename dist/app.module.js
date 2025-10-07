@@ -14,12 +14,21 @@ const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_config_1 = require("./config/typeorm.config");
 const user_module_1 = require("./modules/user/user.module");
 const category_module_1 = require("./modules/category/category.module");
+const config_1 = require("@nestjs/config");
+const path_1 = require("path");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forRoot((0, typeorm_config_1.TypeOrmConfig)()), user_module_1.UserModule, category_module_1.CategoryModule],
+        imports: [
+            config_1.ConfigModule.forRoot({
+                envFilePath: (0, path_1.join)(process.cwd(), '.env'),
+            }),
+            typeorm_1.TypeOrmModule.forRoot((0, typeorm_config_1.TypeOrmConfig)()),
+            user_module_1.UserModule,
+            category_module_1.CategoryModule,
+        ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })

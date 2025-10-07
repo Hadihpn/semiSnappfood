@@ -17,13 +17,20 @@ const common_1 = require("@nestjs/common");
 const category_service_1 = require("./category.service");
 const create_category_dto_1 = require("./dto/create-category.dto");
 const update_category_dto_1 = require("./dto/update-category.dto");
+const swagger_1 = require("@nestjs/swagger");
+const upload_file_interceptor_1 = require("../../common/interceptors/upload_file.interceptor");
 let CategoryController = class CategoryController {
     categoryService;
     constructor(categoryService) {
         this.categoryService = categoryService;
     }
-    create(createCategoryDto) {
-        return this.categoryService.create(createCategoryDto);
+    create(createCategoryDto, image) {
+        try {
+            return this.categoryService.create(createCategoryDto, image);
+        }
+        catch (error) {
+            return error;
+        }
     }
     findAll() {
         return this.categoryService.findAll();
@@ -41,9 +48,17 @@ let CategoryController = class CategoryController {
 exports.CategoryController = CategoryController;
 __decorate([
     (0, common_1.Post)(),
+    (0, common_1.UseInterceptors)((0, upload_file_interceptor_1.UploadFileS3)('image')),
+    (0, swagger_1.ApiConsumes)('multipart/form-data'),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.UploadedFile)(new common_1.ParseFilePipe({
+        validators: [
+            new common_1.MaxFileSizeValidator({ maxSize: 10 * 1024 * 1024 }),
+            new common_1.FileTypeValidator({ fileType: 'image/(png|jpg|jpeg|webp)' }),
+        ],
+    }))),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_category_dto_1.CreateCategoryDto]),
+    __metadata("design:paramtypes", [create_category_dto_1.CreateCategoryDto, Object]),
     __metadata("design:returntype", void 0)
 ], CategoryController.prototype, "create", null);
 __decorate([
@@ -76,6 +91,7 @@ __decorate([
 ], CategoryController.prototype, "remove", null);
 exports.CategoryController = CategoryController = __decorate([
     (0, common_1.Controller)('category'),
+    (0, swagger_1.ApiTags)('Category'),
     __metadata("design:paramtypes", [category_service_1.CategoryService])
 ], CategoryController);
 //# sourceMappingURL=category.controller.js.map
