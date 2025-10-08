@@ -12,6 +12,7 @@ import {
   MaxFileSizeValidator,
   FileTypeValidator,
   Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
@@ -21,6 +22,7 @@ import { UploadFileS3 } from 'src/common/interceptors/upload_file.interceptor';
 import { UploadingImage } from 'src/common/decorators/image.decorator';
 import { Pagination } from 'src/common/decorators/pagination.decorator';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { FormType } from 'src/common/enums/form-type.enum';
 
 @Controller('category')
 @ApiTags('Category')
@@ -29,7 +31,7 @@ export class CategoryController {
 
   @Post()
   @UseInterceptors(UploadFileS3('image'))
-  @ApiConsumes('multipart/form-data')
+  @ApiConsumes(FormType.Multipart)
   create(
     @Body() createCategoryDto: CreateCategoryDto,
     @UploadedFile(
@@ -61,11 +63,22 @@ export class CategoryController {
   }
 
   @Patch(':id')
+  @UseInterceptors(UploadFileS3('image'))
+  @ApiConsumes(FormType.Multipart)
   update(
-    @Param('id') id: string,
+    @Param('id',ParseIntPipe) id: number,
     @Body() updateCategoryDto: UpdateCategoryDto,
+     @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 10 * 1024 * 1024 }),
+          new FileTypeValidator({ fileType: 'image/(png|jpg|jpeg|webp)' }),
+        ],
+      }),
+    )
+    image: Express.Multer.File,
   ) {
-    return this.categoryService.update(+id, updateCategoryDto);
+    return this.categoryService.update(id, updateCategoryDto,image);
   }
 
   @Delete(':id')

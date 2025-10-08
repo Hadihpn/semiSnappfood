@@ -7,7 +7,10 @@ import { Repository } from 'typeorm';
 import { S3Services } from '../s3/s3.services';
 import { isBoolean, toBoolean } from 'src/utility/function.utils';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { paginationGenerator, paginationSolver } from 'src/common/utility/pagination.util';
+import {
+  paginationGenerator,
+  paginationSolver,
+} from 'src/common/utility/pagination.util';
 
 @Injectable()
 export class CategoryService {
@@ -21,10 +24,10 @@ export class CategoryService {
     image: Express.Multer.File,
   ) {
     let { title, slug, show, parentId } = createCategoryDto;
-    if(slug){
+    if (slug) {
       const category = await this.findOneBySlug(slug);
-      if(category){
-        throw new ConflictException("category already existed")
+      if (category) {
+        throw new ConflictException('category already existed');
       }
     }
     const { Location } = await this.s3.uploadFile(
@@ -54,15 +57,18 @@ export class CategoryService {
       parentId: parent?.id ? parent.Id : null,
       image: Location,
     });
-    await this.categoryRepository.save(result)
+    await this.categoryRepository.save(result);
     return {
       message: 'category created successfully',
       data: result,
     };
   }
 
-  async findAll(paginationDto:PaginationDto) {
-    const {limit,page,skip}= paginationSolver(paginationDto.page,paginationDto.limit)
+  async findAll(paginationDto: PaginationDto) {
+    const { limit, page, skip } = paginationSolver(
+      paginationDto.page,
+      paginationDto.limit,
+    );
     const [categories, count] = await this.categoryRepository.findAndCount({
       where: {},
       relations: {
@@ -74,11 +80,11 @@ export class CategoryService {
         },
       },
       skip,
-      take:limit,
-      order:{id:"DESC"}
+      take: limit,
+      order: { id: 'DESC' },
     });
     return {
-      pagination:paginationGenerator(count,page,limit),
+      pagination: paginationGenerator(count, page, limit),
       categories,
     };
   }
@@ -89,8 +95,12 @@ export class CategoryService {
   async findOneBySlug(slug: string) {
     return await this.categoryRepository.findOneBy({ slug });
   }
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  update(
+    id: number,
+    updateCategoryDto: UpdateCategoryDto,
+    image: Express.Multer.File,
+  ) {
+    const { title, slug, show, parentId } = updateCategoryDto;
   }
 
   remove(id: number) {
