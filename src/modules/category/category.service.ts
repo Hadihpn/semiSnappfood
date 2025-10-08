@@ -118,7 +118,7 @@ export class CategoryService {
     if (location) {
       UpdateObject['image'] = Location;
       UpdateObject['imageKey'] = Key;
-      await this.s3.deleteFile(category.imageKey);
+      if(category.imageKey) await this.s3.deleteFile(category.imageKey);
     }
     if (title) UpdateObject['title'] = title;
     if (show && isBoolean(show)) UpdateObject['show'] = toBoolean(show);
@@ -138,7 +138,11 @@ export class CategoryService {
 return {message:'category updated successfully'}
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  async remove(id: number) {
+    const category = await this.findOne(id)
+    await this.categoryRepository.delete(category);
+    return {
+      message:"category deleted successfully",
+    }
   }
 }
