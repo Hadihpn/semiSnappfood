@@ -1,6 +1,6 @@
 import { BaseEntity } from 'src/common/abstracts/base.entity';
 import { EntityEnums } from 'src/common/enums/entity-name.enum';
-import {  Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity(EntityEnums.CATEGORY)
 export class CategoryEntity extends BaseEntity {
@@ -10,6 +10,8 @@ export class CategoryEntity extends BaseEntity {
   slug: string;
   @Column()
   image: string;
+  @Column()
+  imageKey: string;
   @Column({ default: true })
   show: boolean;
   // @Column()

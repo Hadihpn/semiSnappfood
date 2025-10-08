@@ -53,7 +53,7 @@ export class CategoryController {
 
   @Get()
   @Pagination()
-  findAll(@Query() paginationDto:PaginationDto) {
+  findAll(@Query() paginationDto: PaginationDto) {
     return this.categoryService.findAll(paginationDto);
   }
 
@@ -66,9 +66,9 @@ export class CategoryController {
   @UseInterceptors(UploadFileS3('image'))
   @ApiConsumes(FormType.Multipart)
   update(
-    @Param('id',ParseIntPipe) id: number,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateCategoryDto: UpdateCategoryDto,
-     @UploadedFile(
+    @UploadedFile(
       new ParseFilePipe({
         validators: [
           new MaxFileSizeValidator({ maxSize: 10 * 1024 * 1024 }),
@@ -78,7 +78,11 @@ export class CategoryController {
     )
     image: Express.Multer.File,
   ) {
-    return this.categoryService.update(id, updateCategoryDto,image);
+    try {
+      return this.categoryService.update(id, updateCategoryDto, image);
+    } catch (error) {
+      return error;
+    }
   }
 
   @Delete(':id')

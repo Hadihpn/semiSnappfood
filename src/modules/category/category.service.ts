@@ -1,9 +1,13 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CategoryEntity } from './entities/category.entity';
-import { Repository } from 'typeorm';
+import { DeepPartial, Repository } from 'typeorm';
 import { S3Services } from '../s3/s3.services';
 import { isBoolean, toBoolean } from 'src/utility/function.utils';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
@@ -30,7 +34,7 @@ export class CategoryService {
         throw new ConflictException('category already existed');
       }
     }
-    const { Location } = await this.s3.uploadFile(
+    const { Location, Key } = await this.s3.uploadFile(
       image,
       'snappfood-category-image',
     );
@@ -48,6 +52,7 @@ export class CategoryService {
       show,
       parentId: parent?.id ? parent.Id : 0,
       image: Location,
+      imageKey: Key,
     });
 
     const result = await this.categoryRepository.create({
@@ -95,12 +100,42 @@ export class CategoryService {
   async findOneBySlug(slug: string) {
     return await this.categoryRepository.findOneBy({ slug });
   }
-  update(
+  async update(
     id: number,
     updateCategoryDto: UpdateCategoryDto,
     image: Express.Multer.File,
   ) {
     const { title, slug, show, parentId } = updateCategoryDto;
+    const category = await this.categoryRepository.findOneBy({ id });
+    if (!category) {
+      throw new ConflictException('category not found');
+    }
+    const UpdateObject: DeepPartial<CategoryEntity> = {};
+    const { Location, Key } = await this.s3.uploadFile(
+      image,
+      'snappfood-category-image',
+    );
+    if (location) {
+      UpdateObject['image'] = Location;
+      UpdateObject['imageKey'] = Key;
+      await this.s3.deleteFile(category.imageKey);
+    }
+    if (title) UpdateObject['title'] = title;
+    if (show && isBoolean(show)) UpdateObject['show'] = toBoolean(show);
+    if (parentId && !isNaN(parseInt(parentId.toString()))) {
+      const category = await this.categoryRepository.findOneBy({
+        id: parentId,
+      });
+      if (!category) throw new NotFoundException('parent category not found');
+      UpdateObject['parentId'] = category.id;
+    }
+    if (slug?.trim() != '') {
+      const category = await this.categoryRepository.findOneBy({ slug });
+      if (category && category.id!== id) throw new NotFoundException('already category exist with this slug');
+      UpdateObject['slug'] = slug;
+    }
+    await this.categoryRepository.update(id, UpdateObject);
+return {message:'category updated successfully'}
   }
 
   remove(id: number) {
