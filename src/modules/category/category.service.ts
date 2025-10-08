@@ -118,7 +118,7 @@ export class CategoryService {
     if (location) {
       UpdateObject['image'] = Location;
       UpdateObject['imageKey'] = Key;
-      if(category.imageKey) await this.s3.deleteFile(category.imageKey);
+      if(category.imageKey) await this.s3.deleteFile(category.imageKey);  
     }
     if (title) UpdateObject['title'] = title;
     if (show && isBoolean(show)) UpdateObject['show'] = toBoolean(show);
@@ -144,5 +144,17 @@ return {message:'category updated successfully'}
     return {
       message:"category deleted successfully",
     }
+  }
+  async findBySlug(slug: string) {
+    const category = await this.categoryRepository.findOne({
+      where: {slug},
+      relations: {
+        children: true,
+      },
+    });
+    if (!category) throw new NotFoundException("not found this category slug ");
+    return {
+      category,
+    };
   }
 }

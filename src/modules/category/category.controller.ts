@@ -50,7 +50,10 @@ export class CategoryController {
       return error;
     }
   }
-
+  @Get("/by-slug/:slug")
+  findBySlug(@Param("slug") slug: string) {
+    return this.categoryService.findBySlug(slug);
+  }
   @Get()
   @Pagination()
   findAll(@Query() paginationDto: PaginationDto) {
