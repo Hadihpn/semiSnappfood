@@ -38,19 +38,23 @@ export class CategoryService {
       image,
       'snappfood-category-image',
     );
+    console.log(Location, Key);
+    console.log('parentId : ', parentId);
+    console.log('parentId : ', +parentId);
 
     if (isBoolean(show)) {
       show = toBoolean(show);
     }
     let parent;
     if (parentId && !isNaN(+parentId)) {
-      parent = await this.categoryRepository.findOneBy({ id: +parentId });
+      parent = await this.categoryRepository.findOneBy({ id: parentId });
+      console.log('parent : ', parent);
     }
     console.log({
       title,
       slug,
       show,
-      parentId: parent?.id ? parent.Id : 0,
+      parentId: parent?.id ? parent.id : 0,
       image: Location,
       imageKey: Key,
     });
@@ -59,8 +63,9 @@ export class CategoryService {
       title,
       slug,
       show,
-      parentId: parent?.id ? parent.Id : null,
+      parentId: parent?.id ? parent.id : null,
       image: Location,
+      imageKey: Key,
     });
     await this.categoryRepository.save(result);
     return {
@@ -98,7 +103,15 @@ export class CategoryService {
     return `This action returns a #${id} category`;
   }
   async findOneBySlug(slug: string) {
-    return await this.categoryRepository.findOneBy({ slug });
+    const category = await this.categoryRepository.findOne({
+      where: { slug },
+      relations: {
+        children: true,
+        parent: true,
+      },
+    });
+    // if(!category) throw new NotFoundException("cannot find any category")
+    return category;
   }
   async update(
     id: number,
@@ -118,7 +131,7 @@ export class CategoryService {
     if (location) {
       UpdateObject['image'] = Location;
       UpdateObject['imageKey'] = Key;
-      if(category.imageKey) await this.s3.deleteFile(category.imageKey);  
+      if (category.imageKey) await this.s3.deleteFile(category.imageKey);
     }
     if (title) UpdateObject['title'] = title;
     if (show && isBoolean(show)) UpdateObject['show'] = toBoolean(show);
@@ -131,28 +144,30 @@ export class CategoryService {
     }
     if (slug?.trim() != '') {
       const category = await this.categoryRepository.findOneBy({ slug });
-      if (category && category.id!== id) throw new NotFoundException('already category exist with this slug');
+      if (category && category.id !== id)
+        throw new NotFoundException('already category exist with this slug');
       UpdateObject['slug'] = slug;
     }
     await this.categoryRepository.update(id, UpdateObject);
-return {message:'category updated successfully'}
+    return { message: 'category updated successfully' };
   }
 
   async remove(id: number) {
-    const category = await this.findOne(id)
+    const category = await this.findOne(id);
     await this.categoryRepository.delete(category);
     return {
-      message:"category deleted successfully",
-    }
+      message: 'category deleted successfully',
+    };
   }
   async findBySlug(slug: string) {
     const category = await this.categoryRepository.findOne({
-      where: {slug},
+      where: { slug },
       relations: {
         children: true,
+        parent:true
       },
     });
-    if (!category) throw new NotFoundException("not found this category slug ");
+    if (!category) throw new NotFoundException('not found this category slug ');
     return {
       category,
     };

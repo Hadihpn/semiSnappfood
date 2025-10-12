@@ -19,6 +19,9 @@ const create_category_dto_1 = require("./dto/create-category.dto");
 const update_category_dto_1 = require("./dto/update-category.dto");
 const swagger_1 = require("@nestjs/swagger");
 const upload_file_interceptor_1 = require("../../common/interceptors/upload_file.interceptor");
+const pagination_decorator_1 = require("../../common/decorators/pagination.decorator");
+const pagination_dto_1 = require("../../common/dto/pagination.dto");
+const form_type_enum_1 = require("../../common/enums/form-type.enum");
 let CategoryController = class CategoryController {
     categoryService;
     constructor(categoryService) {
@@ -32,14 +35,28 @@ let CategoryController = class CategoryController {
             return error;
         }
     }
-    findAll() {
-        return this.categoryService.findAll();
+    findBySlug(slug) {
+        try {
+            return this.categoryService.findBySlug(slug);
+        }
+        catch (error) {
+            console.log(error);
+            return error;
+        }
+    }
+    findAll(paginationDto) {
+        return this.categoryService.findAll(paginationDto);
     }
     findOne(id) {
         return this.categoryService.findOne(+id);
     }
-    update(id, updateCategoryDto) {
-        return this.categoryService.update(+id, updateCategoryDto);
+    update(id, updateCategoryDto, image) {
+        try {
+            return this.categoryService.update(id, updateCategoryDto, image);
+        }
+        catch (error) {
+            return error;
+        }
     }
     remove(id) {
         return this.categoryService.remove(+id);
@@ -49,7 +66,7 @@ exports.CategoryController = CategoryController;
 __decorate([
     (0, common_1.Post)(),
     (0, common_1.UseInterceptors)((0, upload_file_interceptor_1.UploadFileS3)('image')),
-    (0, swagger_1.ApiConsumes)('multipart/form-data'),
+    (0, swagger_1.ApiConsumes)(form_type_enum_1.FormType.Multipart),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.UploadedFile)(new common_1.ParseFilePipe({
         validators: [
@@ -62,9 +79,18 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], CategoryController.prototype, "create", null);
 __decorate([
-    (0, common_1.Get)(),
+    (0, common_1.Get)('/by-slug/:slug'),
+    __param(0, (0, common_1.Param)('slug')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], CategoryController.prototype, "findBySlug", null);
+__decorate([
+    (0, common_1.Get)(),
+    (0, pagination_decorator_1.Pagination)(),
+    __param(0, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [pagination_dto_1.PaginationDto]),
     __metadata("design:returntype", void 0)
 ], CategoryController.prototype, "findAll", null);
 __decorate([
@@ -76,10 +102,18 @@ __decorate([
 ], CategoryController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.UseInterceptors)((0, upload_file_interceptor_1.UploadFileS3)('image')),
+    (0, swagger_1.ApiConsumes)(form_type_enum_1.FormType.Multipart),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
+    __param(2, (0, common_1.UploadedFile)(new common_1.ParseFilePipe({
+        validators: [
+            new common_1.MaxFileSizeValidator({ maxSize: 10 * 1024 * 1024 }),
+            new common_1.FileTypeValidator({ fileType: 'image/(png|jpg|jpeg|webp)' }),
+        ],
+    }))),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_category_dto_1.UpdateCategoryDto]),
+    __metadata("design:paramtypes", [Number, update_category_dto_1.UpdateCategoryDto, Object]),
     __metadata("design:returntype", void 0)
 ], CategoryController.prototype, "update", null);
 __decorate([

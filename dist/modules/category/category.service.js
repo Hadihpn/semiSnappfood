@@ -19,6 +19,7 @@ const category_entity_1 = require("./entities/category.entity");
 const typeorm_2 = require("typeorm");
 const s3_services_1 = require("../s3/s3.services");
 const function_utils_1 = require("../../utility/function.utils");
+const pagination_util_1 = require("../../common/utility/pagination.util");
 let CategoryService = class CategoryService {
     categoryRepository;
     s3;
@@ -31,30 +32,36 @@ let CategoryService = class CategoryService {
         if (slug) {
             const category = await this.findOneBySlug(slug);
             if (category) {
-                throw new common_1.ConflictException("category already existed");
+                throw new common_1.ConflictException('category already existed');
             }
         }
-        const { Location } = await this.s3.uploadFile(image, 'snappfood-category-image');
+        const { Location, Key } = await this.s3.uploadFile(image, 'snappfood-category-image');
+        console.log(Location, Key);
+        console.log('parentId : ', parentId);
+        console.log('parentId : ', +parentId);
         if ((0, function_utils_1.isBoolean)(show)) {
             show = (0, function_utils_1.toBoolean)(show);
         }
         let parent;
         if (parentId && !isNaN(+parentId)) {
-            parent = await this.categoryRepository.findOneBy({ id: +parentId });
+            parent = await this.categoryRepository.findOneBy({ id: parentId });
+            console.log('parent : ', parent);
         }
         console.log({
             title,
             slug,
             show,
-            parentId: parent?.id ? parent.Id : 0,
+            parentId: parent?.id ? parent.id : 0,
             image: Location,
+            imageKey: Key,
         });
         const result = await this.categoryRepository.create({
             title,
             slug,
             show,
-            parentId: parent?.id ? parent.Id : null,
+            parentId: parent?.id ? parent.id : null,
             image: Location,
+            imageKey: Key,
         });
         await this.categoryRepository.save(result);
         return {
@@ -62,7 +69,8 @@ let CategoryService = class CategoryService {
             data: result,
         };
     }
-    async findAll() {
+    async findAll(paginationDto) {
+        const { limit, page, skip } = (0, pagination_util_1.paginationSolver)(paginationDto.page, paginationDto.limit);
         const [categories, count] = await this.categoryRepository.findAndCount({
             where: {},
             relations: {
@@ -73,8 +81,12 @@ let CategoryService = class CategoryService {
                     title: true,
                 },
             },
+            skip,
+            take: limit,
+            order: { id: 'DESC' },
         });
         return {
+            pagination: (0, pagination_util_1.paginationGenerator)(count, page, limit),
             categories,
         };
     }
@@ -82,13 +94,70 @@ let CategoryService = class CategoryService {
         return `This action returns a #${id} category`;
     }
     async findOneBySlug(slug) {
-        return await this.categoryRepository.findOneBy({ slug });
+        const category = await this.categoryRepository.findOne({
+            where: { slug },
+            relations: {
+                children: true,
+                parent: true,
+            },
+        });
+        return category;
     }
-    update(id, updateCategoryDto) {
-        return `This action updates a #${id} category`;
+    async update(id, updateCategoryDto, image) {
+        const { title, slug, show, parentId } = updateCategoryDto;
+        const category = await this.categoryRepository.findOneBy({ id });
+        if (!category) {
+            throw new common_1.ConflictException('category not found');
+        }
+        const UpdateObject = {};
+        const { Location, Key } = await this.s3.uploadFile(image, 'snappfood-category-image');
+        if (location) {
+            UpdateObject['image'] = Location;
+            UpdateObject['imageKey'] = Key;
+            if (category.imageKey)
+                await this.s3.deleteFile(category.imageKey);
+        }
+        if (title)
+            UpdateObject['title'] = title;
+        if (show && (0, function_utils_1.isBoolean)(show))
+            UpdateObject['show'] = (0, function_utils_1.toBoolean)(show);
+        if (parentId && !isNaN(parseInt(parentId.toString()))) {
+            const category = await this.categoryRepository.findOneBy({
+                id: parentId,
+            });
+            if (!category)
+                throw new common_1.NotFoundException('parent category not found');
+            UpdateObject['parentId'] = category.id;
+        }
+        if (slug?.trim() != '') {
+            const category = await this.categoryRepository.findOneBy({ slug });
+            if (category && category.id !== id)
+                throw new common_1.NotFoundException('already category exist with this slug');
+            UpdateObject['slug'] = slug;
+        }
+        await this.categoryRepository.update(id, UpdateObject);
+        return { message: 'category updated successfully' };
     }
-    remove(id) {
-        return `This action removes a #${id} category`;
+    async remove(id) {
+        const category = await this.findOne(id);
+        await this.categoryRepository.delete(category);
+        return {
+            message: 'category deleted successfully',
+        };
+    }
+    async findBySlug(slug) {
+        const category = await this.categoryRepository.findOne({
+            where: { slug },
+            relations: {
+                children: true,
+                parent: true
+            },
+        });
+        if (!category)
+            throw new common_1.NotFoundException('not found this category slug ');
+        return {
+            category,
+        };
     }
 };
 exports.CategoryService = CategoryService;

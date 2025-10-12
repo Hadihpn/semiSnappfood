@@ -50,9 +50,14 @@ export class CategoryController {
       return error;
     }
   }
-  @Get("/by-slug/:slug")
-  findBySlug(@Param("slug") slug: string) {
-    return this.categoryService.findBySlug(slug);
+  @Get('/by-slug/:slug')
+  findBySlug(@Param('slug') slug: string) {
+    try {
+      return this.categoryService.findBySlug(slug);
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
   }
   @Get()
   @Pagination()

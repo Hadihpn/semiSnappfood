@@ -17,6 +17,7 @@ let CategoryEntity = class CategoryEntity extends base_entity_1.BaseEntity {
     title;
     slug;
     image;
+    imageKey;
     show;
     parentId;
     parent;
@@ -35,6 +36,10 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], CategoryEntity.prototype, "image", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], CategoryEntity.prototype, "imageKey", void 0);
 __decorate([
     (0, typeorm_1.Column)({ default: true }),
     __metadata("design:type", Boolean)

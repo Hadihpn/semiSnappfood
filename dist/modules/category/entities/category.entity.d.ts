@@ -3,6 +3,7 @@ export declare class CategoryEntity extends BaseEntity {
     title: string;
     slug: string;
     image: string;
+    imageKey: string;
     show: boolean;
     parentId: number;
     parent: CategoryEntity;

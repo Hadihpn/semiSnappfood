@@ -3,6 +3,7 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 import { CategoryEntity } from './entities/category.entity';
 import { Repository } from 'typeorm';
 import { S3Services } from '../s3/s3.services';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 export declare class CategoryService {
     private categoryRepository;
     private s3;
@@ -11,11 +12,24 @@ export declare class CategoryService {
         message: string;
         data: CategoryEntity;
     }>;
-    findAll(): Promise<{
+    findAll(paginationDto: PaginationDto): Promise<{
+        pagination: {
+            totalCount: number;
+            page: number;
+            countPerPage: number;
+            pageCount: number;
+        };
         categories: CategoryEntity[];
     }>;
     findOne(id: number): string;
     findOneBySlug(slug: string): Promise<CategoryEntity | null>;
-    update(id: number, updateCategoryDto: UpdateCategoryDto): string;
-    remove(id: number): string;
+    update(id: number, updateCategoryDto: UpdateCategoryDto, image: Express.Multer.File): Promise<{
+        message: string;
+    }>;
+    remove(id: number): Promise<{
+        message: string;
+    }>;
+    findBySlug(slug: string): Promise<{
+        category: CategoryEntity;
+    }>;
 }
