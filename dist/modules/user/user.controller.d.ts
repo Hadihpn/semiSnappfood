@@ -7,6 +7,6 @@ export declare class UserController {
     create(createUserDto: CreateUserDto): Promise<import("./entities/user.entity").UserEntity>;
     findAll(): string;
     findOne(id: string): string;
-    update(id: string, updateUserDto: UpdateUserDto): string;
+    update(id: string, updateUserDto: UpdateUserDto): Promise<import("typeorm").UpdateResult>;
     remove(id: string): string;
 }

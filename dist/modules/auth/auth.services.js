@@ -19,18 +19,15 @@ const typeorm_2 = require("typeorm");
 const crypto_1 = require("crypto");
 const jwt_1 = require("@nestjs/jwt");
 const user_entity_1 = require("../user/entities/user.entity");
-const otp_entity_1 = require("../user/entities/otp.entity");
 const user_service_1 = require("../user/user.service");
 const otp_service_1 = require("../user/otp.service");
 let AuthService = class AuthService {
     userRepository;
-    otpRepository;
     jwtService;
     userService;
     otpService;
-    constructor(userRepository, otpRepository, jwtService, userService, otpService) {
+    constructor(userRepository, jwtService, userService, otpService) {
         this.userRepository = userRepository;
-        this.otpRepository = otpRepository;
         this.jwtService = jwtService;
         this.userService = userService;
         this.otpService = otpService;
@@ -60,12 +57,7 @@ let AuthService = class AuthService {
     async checkOtp(otpDto) {
         const { code, mobile } = otpDto;
         const now = new Date();
-        const user = await this.userRepository.findOne({
-            where: { mobile },
-            relations: {
-                otp: true,
-            },
-        });
+        const user = await this.userService.findOneByMobile({ mobile });
         if (!user || !user?.otp)
             throw new common_1.UnauthorizedException('Not Found Account');
         const otp = user?.otp;
@@ -74,9 +66,8 @@ let AuthService = class AuthService {
         if (otp.expires_in < now)
             throw new common_1.UnauthorizedException('Otp Code is expired');
         if (!user.mobile_verify) {
-            await this.userRepository.update({ id: user.id }, {
-                mobile_verify: true,
-            });
+            user.mobile_verify = true;
+            await this.userService.update(user.id, user);
         }
         const { accessToken, refreshToken } = this.makeTokensForUser({
             id: user.id,
@@ -151,9 +142,7 @@ exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(user_entity_1.UserEntity)),
-    __param(1, (0, typeorm_1.InjectRepository)(otp_entity_1.OTPEntity)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
-        typeorm_2.Repository,
         jwt_1.JwtService,
         user_service_1.UserService,
         otp_service_1.OtpService])

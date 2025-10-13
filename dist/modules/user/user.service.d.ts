@@ -12,6 +12,6 @@ export declare class UserService {
     findAll(): string;
     findOne(id: number): string;
     findOneByMobile(dto: SendOtpDto): Promise<UserEntity | null>;
-    update(id: number, updateUserDto: UpdateUserDto): string;
+    update(id: number, updateUserDto: UpdateUserDto): Promise<import("typeorm").UpdateResult>;
     remove(id: number): string;
 }

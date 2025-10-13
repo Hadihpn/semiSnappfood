@@ -30,6 +30,7 @@ let UserService = class UserService {
         const newUser = await this.userRepository.create({
             mobile,
         });
+        await this.userRepository.save(newUser);
         const otp = await this.otpService.create({ code: otp_code, expires_in: otp_expires_in, userId: newUser.id });
         newUser.otpId = otp.id;
         await this.userRepository.save(newUser);
@@ -48,8 +49,8 @@ let UserService = class UserService {
             relations: { otp: true },
         });
     }
-    update(id, updateUserDto) {
-        return `This action updates a #${id} user`;
+    async update(id, updateUserDto) {
+        return await this.userRepository.update({ id }, updateUserDto);
     }
     remove(id) {
         return `This action removes a #${id} user`;

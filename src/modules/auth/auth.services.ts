@@ -14,14 +14,12 @@ import { UserEntity } from '../user/entities/user.entity';
 import { OTPEntity } from '../user/entities/otp.entity';
 import { UserService } from '../user/user.service';
 import { OtpService } from '../user/otp.service';
-import { UpdateOtpDto } from '../user/dto/update-otp.dto';
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
 
-    @InjectRepository(OTPEntity) private otpRepository: Repository<OTPEntity>,
     private jwtService: JwtService,
     private userService: UserService,
     private otpService: OtpService,
@@ -35,10 +33,6 @@ export class AuthService {
     const code = randomInt(10000, 99999).toString();
     let user = await this.userService.findOneByMobile(otpDto);
     if (!user) {
-      // user = this.userRepository.create({
-      //   mobile,
-      // });
-      // user = await this.userRepository.save(user);
       user = await this.userService.create({
         mobile,
         otp_code: code,
@@ -57,12 +51,7 @@ export class AuthService {
   async checkOtp(otpDto: CheckOtpDto) {
     const { code, mobile } = otpDto;
     const now = new Date();
-    const user = await this.userRepository.findOne({
-      where: { mobile },
-      relations: {
-        otp: true,
-      },
-    });
+    const user = await this.userService.findOneByMobile({mobile})
     if (!user || !user?.otp)
       throw new UnauthorizedException('Not Found Account');
     const otp = user?.otp;
@@ -71,12 +60,8 @@ export class AuthService {
     if (otp.expires_in < now)
       throw new UnauthorizedException('Otp Code is expired');
     if (!user.mobile_verify) {
-      await this.userRepository.update(
-        { id: user.id },
-        {
-          mobile_verify: true,
-        },
-      );
+      user.mobile_verify=true;
+      await this.userService.update(user.id,user)
     }
     const { accessToken, refreshToken } = this.makeTokensForUser({
       id: user.id,
@@ -99,7 +84,6 @@ export class AuthService {
     try {
       const expiresIn = new Date(new Date().getTime() + 1000 * 60 * 2);
       const code = randomInt(10000, 99999).toString();
-      // let otp = await this.otpRepository.findOneBy({ userId: user.id });
       let { otp } = user;
       if (otp.expires_in > new Date()) {
         throw new BadRequestException('otp code not expired');
