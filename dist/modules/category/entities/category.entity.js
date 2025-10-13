@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CategoryEntity = void 0;
 const base_entity_1 = require("../../../common/abstracts/base.entity");
 const entity_name_enum_1 = require("../../../common/enums/entity-name.enum");
+const supplier_entity_1 = require("../../supplier/entities/supplier.entity");
 const typeorm_1 = require("typeorm");
 let CategoryEntity = class CategoryEntity extends base_entity_1.BaseEntity {
     title;
@@ -22,6 +23,7 @@ let CategoryEntity = class CategoryEntity extends base_entity_1.BaseEntity {
     parentId;
     parent;
     children;
+    suppliers;
 };
 exports.CategoryEntity = CategoryEntity;
 __decorate([
@@ -58,6 +60,10 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => CategoryEntity, (category) => category.parent),
     __metadata("design:type", Array)
 ], CategoryEntity.prototype, "children", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => supplier_entity_1.SupplierEntity, (supplier) => supplier.category),
+    __metadata("design:type", Array)
+], CategoryEntity.prototype, "suppliers", void 0);
 exports.CategoryEntity = CategoryEntity = __decorate([
     (0, typeorm_1.Entity)(entity_name_enum_1.EntityEnums.Category)
 ], CategoryEntity);

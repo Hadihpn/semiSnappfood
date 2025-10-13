@@ -1,4 +1,5 @@
 import { BaseEntity } from 'src/common/abstracts/base.entity';
+import { SupplierEntity } from 'src/modules/supplier/entities/supplier.entity';
 export declare class CategoryEntity extends BaseEntity {
     title: string;
     slug: string;
@@ -8,4 +9,5 @@ export declare class CategoryEntity extends BaseEntity {
     parentId: number;
     parent: CategoryEntity;
     children: CategoryEntity[];
+    suppliers: SupplierEntity[];
 }

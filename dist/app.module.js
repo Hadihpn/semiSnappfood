@@ -17,6 +17,7 @@ const category_module_1 = require("./modules/category/category.module");
 const config_1 = require("@nestjs/config");
 const path_1 = require("path");
 const auth_module_1 = require("./modules/auth/auth.module");
+const supplier_module_1 = require("./modules/supplier/supplier.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -29,7 +30,8 @@ exports.AppModule = AppModule = __decorate([
             typeorm_1.TypeOrmModule.forRoot((0, typeorm_config_1.TypeOrmConfig)()),
             user_module_1.UserModule,
             category_module_1.CategoryModule,
-            auth_module_1.AuthModule
+            auth_module_1.AuthModule,
+            supplier_module_1.SupplierModule
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
