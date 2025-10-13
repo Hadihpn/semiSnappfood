@@ -13,6 +13,7 @@ exports.SupplierEntity = void 0;
 const entity_name_enum_1 = require("../../../common/enums/entity-name.enum");
 const category_entity_1 = require("../../category/entities/category.entity");
 const typeorm_1 = require("typeorm");
+const supplier_otp_entity_1 = require("./supplier_otp.entity");
 let SupplierEntity = class SupplierEntity {
     id;
     manager_name;
@@ -22,10 +23,12 @@ let SupplierEntity = class SupplierEntity {
     phone;
     invite_code;
     categoryId;
+    otpId;
     category;
     agentId;
     agent;
     subsets;
+    otp;
 };
 exports.SupplierEntity = SupplierEntity;
 __decorate([
@@ -61,6 +64,10 @@ __decorate([
     __metadata("design:type", Number)
 ], SupplierEntity.prototype, "categoryId", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", Number)
+], SupplierEntity.prototype, "otpId", void 0);
+__decorate([
     (0, typeorm_1.ManyToOne)(() => category_entity_1.CategoryEntity, (category) => category.suppliers, {
         onDelete: 'SET NULL',
     }),
@@ -78,6 +85,11 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => SupplierEntity, (supplier) => supplier.agent),
     __metadata("design:type", Array)
 ], SupplierEntity.prototype, "subsets", void 0);
+__decorate([
+    (0, typeorm_1.OneToOne)(() => supplier_otp_entity_1.SupplierOTPEntity, (otp) => otp.supplier),
+    (0, typeorm_1.JoinColumn)(),
+    __metadata("design:type", supplier_otp_entity_1.SupplierOTPEntity)
+], SupplierEntity.prototype, "otp", void 0);
 exports.SupplierEntity = SupplierEntity = __decorate([
     (0, typeorm_1.Entity)(entity_name_enum_1.EntityEnums.Supplier)
 ], SupplierEntity);

@@ -3,11 +3,14 @@ import { CategoryEntity } from 'src/modules/category/entities/category.entity';
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { SupplierOTPEntity } from './supplier_otp.entity';
 
 @Entity(EntityEnums.Supplier)
 export class SupplierEntity {
@@ -27,6 +30,8 @@ export class SupplierEntity {
   invite_code: string;
   @Column({ nullable: true })
   categoryId: number;
+  @Column({ nullable: true })
+  otpId: number;
   @ManyToOne(() => CategoryEntity, (category) => category.suppliers, {
     onDelete: 'SET NULL',
   })
@@ -37,4 +42,7 @@ export class SupplierEntity {
   agent: SupplierEntity;
   @OneToMany(() => SupplierEntity, (supplier) => supplier.agent)
   subsets: SupplierEntity[];
+  @OneToOne(() => SupplierOTPEntity, (otp) => otp.supplier)
+  @JoinColumn()
+  otp: SupplierOTPEntity;
 }

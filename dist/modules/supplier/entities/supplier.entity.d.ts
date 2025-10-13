@@ -1,4 +1,5 @@
 import { CategoryEntity } from 'src/modules/category/entities/category.entity';
+import { SupplierOTPEntity } from './supplier_otp.entity';
 export declare class SupplierEntity {
     id: number;
     manager_name: string;
@@ -8,8 +9,10 @@ export declare class SupplierEntity {
     phone: string;
     invite_code: string;
     categoryId: number;
+    otpId: number;
     category: CategoryEntity;
     agentId: number;
     agent: SupplierEntity;
     subsets: SupplierEntity[];
+    otp: SupplierOTPEntity;
 }
