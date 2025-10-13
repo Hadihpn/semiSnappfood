@@ -2,7 +2,7 @@ import { BaseEntity } from 'src/common/abstracts/base.entity';
 import { EntityEnums } from 'src/common/enums/entity-name.enum';
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 
-@Entity(EntityEnums.CATEGORY)
+@Entity(EntityEnums.Category)
 export class CategoryEntity extends BaseEntity {
   @Column()
   title: string;

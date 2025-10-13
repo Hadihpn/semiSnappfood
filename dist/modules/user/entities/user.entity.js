@@ -14,6 +14,7 @@ const entity_name_enum_1 = require("../../../common/enums/entity-name.enum");
 const typeorm_1 = require("typeorm");
 const address_entity_1 = require("./address.entity");
 const base_entity_1 = require("../../../common/abstracts/base.entity");
+const otp_entity_1 = require("./otp.entity");
 let UserEntity = class UserEntity extends base_entity_1.BaseEntity {
     full_name;
     last_name;
@@ -22,9 +23,12 @@ let UserEntity = class UserEntity extends base_entity_1.BaseEntity {
     invite_code;
     score;
     agentId;
+    mobile_verify;
+    otpId;
     created_at;
     updated_at;
     addressList;
+    otp;
 };
 exports.UserEntity = UserEntity;
 __decorate([
@@ -36,15 +40,15 @@ __decorate([
     __metadata("design:type", String)
 ], UserEntity.prototype, "last_name", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ unique: true }),
+    (0, typeorm_1.Column)({ unique: true, nullable: true }),
     __metadata("design:type", String)
 ], UserEntity.prototype, "email", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true, unique: true }),
+    (0, typeorm_1.Column)({ nullable: false, unique: true }),
     __metadata("design:type", String)
 ], UserEntity.prototype, "mobile", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ unique: true }),
+    (0, typeorm_1.Column)({ unique: true, nullable: true }),
     __metadata("design:type", String)
 ], UserEntity.prototype, "invite_code", void 0);
 __decorate([
@@ -55,6 +59,14 @@ __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], UserEntity.prototype, "agentId", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true, default: false }),
+    __metadata("design:type", Boolean)
+], UserEntity.prototype, "mobile_verify", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", Number)
+], UserEntity.prototype, "otpId", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)
@@ -67,7 +79,12 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => address_entity_1.UserAddress, (address) => address.user),
     __metadata("design:type", Array)
 ], UserEntity.prototype, "addressList", void 0);
+__decorate([
+    (0, typeorm_1.OneToOne)(() => otp_entity_1.OTPEntity, (otp) => otp.user),
+    (0, typeorm_1.JoinColumn)(),
+    __metadata("design:type", otp_entity_1.OTPEntity)
+], UserEntity.prototype, "otp", void 0);
 exports.UserEntity = UserEntity = __decorate([
-    (0, typeorm_1.Entity)(entity_name_enum_1.EntityEnums.USER)
+    (0, typeorm_1.Entity)(entity_name_enum_1.EntityEnums.User)
 ], UserEntity);
 //# sourceMappingURL=user.entity.js.map

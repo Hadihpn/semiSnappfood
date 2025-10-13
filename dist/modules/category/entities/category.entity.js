@@ -59,6 +59,6 @@ __decorate([
     __metadata("design:type", Array)
 ], CategoryEntity.prototype, "children", void 0);
 exports.CategoryEntity = CategoryEntity = __decorate([
-    (0, typeorm_1.Entity)(entity_name_enum_1.EntityEnums.CATEGORY)
+    (0, typeorm_1.Entity)(entity_name_enum_1.EntityEnums.Category)
 ], CategoryEntity);
 //# sourceMappingURL=category.entity.js.map

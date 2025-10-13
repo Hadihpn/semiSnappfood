@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { BaseEntity } from 'src/common/abstracts/base.entity';
-@Entity(EntityEnums.USERAddress)
+@Entity(EntityEnums.UserAddress)
 export class UserAddress extends BaseEntity {
   @Column()
   title: string;

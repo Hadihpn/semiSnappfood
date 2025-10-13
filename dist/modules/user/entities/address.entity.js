@@ -60,6 +60,6 @@ __decorate([
     __metadata("design:type", user_entity_1.UserEntity)
 ], UserAddress.prototype, "user", void 0);
 exports.UserAddress = UserAddress = __decorate([
-    (0, typeorm_1.Entity)(entity_name_enum_1.EntityEnums.USERAddress)
+    (0, typeorm_1.Entity)(entity_name_enum_1.EntityEnums.UserAddress)
 ], UserAddress);
 //# sourceMappingURL=address.entity.js.map
