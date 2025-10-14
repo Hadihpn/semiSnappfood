@@ -29,10 +29,16 @@ let AuthController = class AuthController {
     checkOtp(otpDto) {
         return this.authService.checkOtp(otpDto);
     }
+    sendSupplierOtp(otpDto) {
+        return this.authService.sendSupplierOtp(otpDto);
+    }
+    checkSupplierOtp(otpDto) {
+        return this.authService.checkSupplierOtp(otpDto);
+    }
 };
 exports.AuthController = AuthController;
 __decorate([
-    (0, common_1.Post)("/send-otp"),
+    (0, common_1.Post)('/send-otp'),
     (0, swagger_1.ApiConsumes)(form_type_enum_1.FormType.UrlEncoded, form_type_enum_1.FormType.JSON),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -40,16 +46,32 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "sendOtp", null);
 __decorate([
-    (0, common_1.Post)("/check-otp"),
+    (0, common_1.Post)('/check-otp'),
     (0, swagger_1.ApiConsumes)(form_type_enum_1.FormType.UrlEncoded, form_type_enum_1.FormType.JSON),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [otp_dto_1.CheckOtpDto]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "checkOtp", null);
+__decorate([
+    (0, common_1.Post)('/send-supplier-otp'),
+    (0, swagger_1.ApiConsumes)(form_type_enum_1.FormType.UrlEncoded, form_type_enum_1.FormType.JSON),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [otp_dto_1.SendSupplierOtpDto]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "sendSupplierOtp", null);
+__decorate([
+    (0, common_1.Post)('/check-supplier-otp'),
+    (0, swagger_1.ApiConsumes)(form_type_enum_1.FormType.UrlEncoded, form_type_enum_1.FormType.JSON),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [otp_dto_1.CheckOtpDto]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "checkSupplierOtp", null);
 exports.AuthController = AuthController = __decorate([
-    (0, common_1.Controller)("auth"),
-    (0, swagger_1.ApiTags)("Auth"),
+    (0, common_1.Controller)('auth'),
+    (0, swagger_1.ApiTags)('Auth'),
     __metadata("design:paramtypes", [auth_services_1.AuthService])
 ], AuthController);
 //# sourceMappingURL=auth.controller.js.map

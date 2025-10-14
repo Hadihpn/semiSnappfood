@@ -21,16 +21,22 @@ const jwt_1 = require("@nestjs/jwt");
 const user_entity_1 = require("../user/entities/user.entity");
 const user_service_1 = require("../user/user.service");
 const otp_service_1 = require("../user/otp.service");
+const supplier_service_1 = require("../supplier/supplier.service");
+const supplier_otp_service_1 = require("../supplier/supplier_otp.service");
 let AuthService = class AuthService {
     userRepository;
     jwtService;
     userService;
     otpService;
-    constructor(userRepository, jwtService, userService, otpService) {
+    supplierService;
+    supplierOtpService;
+    constructor(userRepository, jwtService, userService, otpService, supplierService, supplierOtpService) {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
         this.userService = userService;
         this.otpService = otpService;
+        this.supplierService = supplierService;
+        this.supplierOtpService = supplierOtpService;
     }
     async sendOtp(otpDto) {
         const { mobile } = otpDto;
@@ -69,8 +75,77 @@ let AuthService = class AuthService {
             user.mobile_verify = true;
             await this.userService.update(user.id, user);
         }
-        const { accessToken, refreshToken } = this.makeTokensForUser({
+        const { accessToken, refreshToken } = this.makeTokensForLogin({
             id: user.id,
+        });
+        return {
+            accessToken,
+            refreshToken,
+            message: 'You logged-in successfully',
+        };
+    }
+    async sendSupplierOtp(sendSupplierOtp) {
+        const { mobile, categoryId, city, manager_name, manager_family, store_name, invite_code, } = sendSupplierOtp;
+        let otp;
+        const expiresIn = new Date(new Date().getTime() + 1000 * 60 * 2);
+        const code = (0, crypto_1.randomInt)(10000, 99999).toString();
+        let supplier = await this.supplierService.findOneByMobile(mobile);
+        if (!supplier) {
+            supplier = await this.supplierService.create({
+                mobile,
+                otp_code: code,
+                otp_expires_in: expiresIn,
+                categoryId,
+                city,
+                invite_code,
+                manager_family,
+                manager_name,
+                store_name,
+            });
+            otp = code;
+        }
+        else {
+            otp = await this.updateOtpForSupplier(supplier);
+        }
+        return {
+            otp,
+            message: 'sent code successfully',
+        };
+    }
+    async updateOtpForSupplier(supplier) {
+        try {
+            const expiresIn = new Date(new Date().getTime() + 1000 * 60 * 2);
+            const code = (0, crypto_1.randomInt)(10000, 99999).toString();
+            let { otp } = supplier;
+            if (otp.expires_in > new Date()) {
+                throw new common_1.BadRequestException('otp code not expired');
+            }
+            otp.code = code;
+            otp.expires_in = expiresIn;
+            await this.supplierOtpService.update(otp.id, otp);
+            return code;
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+    async checkSupplierOtp(otpDto) {
+        const { code, mobile } = otpDto;
+        const now = new Date();
+        const supplier = await this.supplierService.findOneByMobile(mobile);
+        if (!supplier || !supplier?.otp)
+            throw new common_1.UnauthorizedException('Not Found Account');
+        const otp = supplier?.otp;
+        if (otp?.code !== code)
+            throw new common_1.UnauthorizedException('Otp code is incorrect');
+        if (otp.expires_in < now)
+            throw new common_1.UnauthorizedException('Otp Code is expired');
+        if (!supplier.mobile_verify) {
+            supplier.mobile_verify = true;
+            await this.userService.update(supplier.id, supplier);
+        }
+        const { accessToken, refreshToken } = this.makeTokensForLogin({
+            id: supplier.id,
         });
         return {
             accessToken,
@@ -105,7 +180,7 @@ let AuthService = class AuthService {
             console.log(error);
         }
     }
-    makeTokensForUser(payload) {
+    makeTokensForLogin(payload) {
         const accessToken = this.jwtService.sign(payload, {
             secret: process.env.ACCESS_TOKEN_SECRET,
             expiresIn: '30d',
@@ -145,6 +220,8 @@ exports.AuthService = AuthService = __decorate([
     __metadata("design:paramtypes", [typeorm_2.Repository,
         jwt_1.JwtService,
         user_service_1.UserService,
-        otp_service_1.OtpService])
+        otp_service_1.OtpService,
+        supplier_service_1.SupplierService,
+        supplier_otp_service_1.SupplierOtpService])
 ], AuthService);
 //# sourceMappingURL=auth.services.js.map

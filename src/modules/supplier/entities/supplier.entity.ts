@@ -25,9 +25,11 @@ export class SupplierEntity {
   @Column()
   city: string;
   @Column()
-  phone: string;
+  mobile: string;
   @Column()
   invite_code: string;
+  @Column({ nullable: true, default: false })
+  mobile_verify: boolean;
   @Column({ nullable: true })
   categoryId: number;
   @Column({ nullable: true })

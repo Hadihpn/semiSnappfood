@@ -16,7 +16,7 @@ export declare class CategoryController {
         };
         categories: import("./entities/category.entity").CategoryEntity[];
     }>;
-    findOne(id: string): string;
+    findOne(id: string): Promise<import("./entities/category.entity").CategoryEntity>;
     update(id: number, updateCategoryDto: UpdateCategoryDto, image: Express.Multer.File): any;
     remove(id: string): Promise<{
         message: string;

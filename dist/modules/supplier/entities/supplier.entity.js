@@ -20,8 +20,9 @@ let SupplierEntity = class SupplierEntity {
     manager_family;
     store_name;
     city;
-    phone;
+    mobile;
     invite_code;
+    mobile_verify;
     categoryId;
     otpId;
     category;
@@ -54,11 +55,15 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
-], SupplierEntity.prototype, "phone", void 0);
+], SupplierEntity.prototype, "mobile", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], SupplierEntity.prototype, "invite_code", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true, default: false }),
+    __metadata("design:type", Boolean)
+], SupplierEntity.prototype, "mobile_verify", void 0);
 __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", Number)

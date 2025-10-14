@@ -21,7 +21,7 @@ export declare class CategoryService {
         };
         categories: CategoryEntity[];
     }>;
-    findOne(id: number): string;
+    findOne(id: number): Promise<CategoryEntity>;
     findOneBySlug(slug: string): Promise<CategoryEntity | null>;
     update(id: number, updateCategoryDto: UpdateCategoryDto, image: Express.Multer.File): Promise<{
         message: string;

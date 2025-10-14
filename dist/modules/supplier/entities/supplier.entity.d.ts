@@ -6,8 +6,9 @@ export declare class SupplierEntity {
     manager_family: string;
     store_name: string;
     city: string;
-    phone: string;
+    mobile: string;
     invite_code: string;
+    mobile_verify: boolean;
     categoryId: number;
     otpId: number;
     category: CategoryEntity;

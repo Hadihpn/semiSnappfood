@@ -90,8 +90,11 @@ let CategoryService = class CategoryService {
             categories,
         };
     }
-    findOne(id) {
-        return `This action returns a #${id} category`;
+    async findOne(id) {
+        const category = await this.categoryRepository.findOneBy({ id });
+        if (!category)
+            throw new common_1.NotFoundException('category not found');
+        return category;
     }
     async findOneBySlug(slug) {
         const category = await this.categoryRepository.findOne({

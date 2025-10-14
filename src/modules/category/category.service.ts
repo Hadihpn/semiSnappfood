@@ -99,8 +99,10 @@ export class CategoryService {
     };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
+  async findOne(id: number) : Promise<CategoryEntity> {
+    const category = await this.categoryRepository.findOneBy({ id });
+    if (!category) throw new NotFoundException('category not found');
+    return category;
   }
   async findOneBySlug(slug: string) {
     const category = await this.categoryRepository.findOne({

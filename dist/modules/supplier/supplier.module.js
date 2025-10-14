@@ -10,13 +10,18 @@ exports.SupplierModule = void 0;
 const common_1 = require("@nestjs/common");
 const supplier_service_1 = require("./supplier.service");
 const supplier_controller_1 = require("./supplier.controller");
+const supplier_entity_1 = require("./entities/supplier.entity");
+const supplier_otp_entity_1 = require("./entities/supplier_otp.entity");
+const typeorm_1 = require("@nestjs/typeorm");
+const supplier_otp_service_1 = require("./supplier_otp.service");
 let SupplierModule = class SupplierModule {
 };
 exports.SupplierModule = SupplierModule;
 exports.SupplierModule = SupplierModule = __decorate([
     (0, common_1.Module)({
+        imports: [typeorm_1.TypeOrmModule.forFeature([supplier_entity_1.SupplierEntity, supplier_otp_entity_1.SupplierOTPEntity])],
         controllers: [supplier_controller_1.SupplierController],
-        providers: [supplier_service_1.SupplierService],
+        providers: [supplier_service_1.SupplierService, supplier_otp_service_1.SupplierOtpService],
     })
 ], SupplierModule);
 //# sourceMappingURL=supplier.module.js.map

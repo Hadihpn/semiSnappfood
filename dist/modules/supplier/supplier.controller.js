@@ -31,8 +31,8 @@ let SupplierController = class SupplierController {
     findOne(id) {
         return this.supplierService.findOne(+id);
     }
-    update(id, updateSupplierDto) {
-        return this.supplierService.update(+id, updateSupplierDto);
+    update(id, updateSupplierSignupDto) {
+        return this.supplierService.update(+id, updateSupplierSignupDto);
     }
     remove(id) {
         return this.supplierService.remove(+id);
