@@ -14,6 +14,7 @@ const entity_name_enum_1 = require("../../../common/enums/entity-name.enum");
 const category_entity_1 = require("../../category/entities/category.entity");
 const typeorm_1 = require("typeorm");
 const supplier_otp_entity_1 = require("./supplier_otp.entity");
+const status_enum_1 = require("../enum/status.enum");
 let SupplierEntity = class SupplierEntity {
     id;
     manager_name;
@@ -26,6 +27,9 @@ let SupplierEntity = class SupplierEntity {
     categoryId;
     otpId;
     category;
+    email;
+    national_code;
+    status;
     agentId;
     agent;
     subsets;
@@ -78,6 +82,18 @@ __decorate([
     }),
     __metadata("design:type", category_entity_1.CategoryEntity)
 ], SupplierEntity.prototype, "category", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], SupplierEntity.prototype, "email", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], SupplierEntity.prototype, "national_code", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true, default: status_enum_1.SupplementaryStatus.SignUp }),
+    __metadata("design:type", String)
+], SupplierEntity.prototype, "status", void 0);
 __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", Number)

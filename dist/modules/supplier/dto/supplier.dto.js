@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateSupplierDto = void 0;
+exports.SupplementaryInformationDto = exports.CreateSupplierDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 class CreateSupplierDto {
@@ -49,7 +49,7 @@ __decorate([
 ], CreateSupplierDto.prototype, "manager_family", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
-    (0, class_validator_1.IsMobilePhone)("fa-IR", {}, { message: "mobile number is invalid" }),
+    (0, class_validator_1.IsMobilePhone)('fa-IR', {}, { message: 'mobile number is invalid' }),
     __metadata("design:type", String)
 ], CreateSupplierDto.prototype, "mobile", void 0);
 __decorate([
@@ -64,4 +64,19 @@ __decorate([
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", Date)
 ], CreateSupplierDto.prototype, "otp_expires_in", void 0);
-//# sourceMappingURL=create-supplier.dto.js.map
+class SupplementaryInformationDto {
+    national_code;
+    email;
+}
+exports.SupplementaryInformationDto = SupplementaryInformationDto;
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    (0, class_validator_1.IsIdentityCard)('IR'),
+    __metadata("design:type", String)
+], SupplementaryInformationDto.prototype, "national_code", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    (0, class_validator_1.IsEmail)(),
+    __metadata("design:type", String)
+], SupplementaryInformationDto.prototype, "email", void 0);
+//# sourceMappingURL=supplier.dto.js.map

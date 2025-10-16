@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SupplierController = void 0;
 const common_1 = require("@nestjs/common");
 const supplier_service_1 = require("./supplier.service");
-const create_supplier_dto_1 = require("./dto/create-supplier.dto");
+const supplier_dto_1 = require("./dto/supplier.dto");
 const update_supplier_dto_1 = require("./dto/update-supplier.dto");
 let SupplierController = class SupplierController {
     supplierService;
@@ -43,7 +43,7 @@ __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_supplier_dto_1.CreateSupplierDto]),
+    __metadata("design:paramtypes", [supplier_dto_1.CreateSupplierDto]),
     __metadata("design:returntype", void 0)
 ], SupplierController.prototype, "create", null);
 __decorate([

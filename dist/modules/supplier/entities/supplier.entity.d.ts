@@ -12,6 +12,9 @@ export declare class SupplierEntity {
     categoryId: number;
     otpId: number;
     category: CategoryEntity;
+    email: string;
+    national_code: string;
+    status: string;
     agentId: number;
     agent: SupplierEntity;
     subsets: SupplierEntity[];

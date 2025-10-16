@@ -18,12 +18,16 @@ const supplier_entity_1 = require("./entities/supplier.entity");
 const typeorm_1 = require("typeorm");
 const typeorm_2 = require("@nestjs/typeorm");
 const supplier_otp_service_1 = require("./supplier_otp.service");
+const core_1 = require("@nestjs/core");
+const status_enum_1 = require("./enum/status.enum");
 let SupplierService = class SupplierService {
     supplierRepository;
     supplierOtpService;
-    constructor(supplierRepository, supplierOtpService) {
+    req;
+    constructor(supplierRepository, supplierOtpService, req) {
         this.supplierRepository = supplierRepository;
         this.supplierOtpService = supplierOtpService;
+        this.req = req;
     }
     async create(createSupplierDto) {
         const { categoryId, city, invite_code, manager_family, manager_name, mobile, store_name, otp_code, otp_expires_in, } = createSupplierDto;
@@ -64,15 +68,36 @@ let SupplierService = class SupplierService {
     update(id, updateSupplierDto) {
         return `This action updates a #${id} supplier`;
     }
+    async saveSapplementaryInformation(infoDto) {
+        const id = this.req?.user?.id;
+        const { email, national_code } = infoDto;
+        let supplier = await this.supplierRepository.findOneBy({ email });
+        if (supplier && supplier.id !== id) {
+            throw new common_1.ConflictException('this supplier with this email already exist');
+        }
+        supplier = await this.supplierRepository.findOneBy({ national_code });
+        if (supplier && supplier.id !== id) {
+            throw new common_1.ConflictException('this supplier with this national_code already exist');
+        }
+        await this.supplierRepository.update({ id }, {
+            email,
+            national_code,
+            status: status_enum_1.SupplementaryStatus.SupplemntaryInformation,
+        });
+        return {
+            message: 'supplementary information updated succesfully',
+        };
+    }
     remove(id) {
         return `This action removes a #${id} supplier`;
     }
 };
 exports.SupplierService = SupplierService;
 exports.SupplierService = SupplierService = __decorate([
-    (0, common_1.Injectable)(),
+    (0, common_1.Injectable)({ scope: common_1.Scope.REQUEST }),
     __param(0, (0, typeorm_2.InjectRepository)(supplier_entity_1.SupplierEntity)),
+    __param(2, (0, common_1.Inject)(core_1.REQUEST)),
     __metadata("design:paramtypes", [typeorm_1.Repository,
-        supplier_otp_service_1.SupplierOtpService])
+        supplier_otp_service_1.SupplierOtpService, Object])
 ], SupplierService);
 //# sourceMappingURL=supplier.service.js.map

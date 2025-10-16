@@ -9,3 +9,7 @@ export declare class CreateSupplierDto {
     otp_code: string;
     otp_expires_in: Date;
 }
+export declare class SupplementaryInformationDto {
+    national_code: string;
+    email: string;
+}

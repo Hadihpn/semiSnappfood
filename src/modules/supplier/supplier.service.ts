@@ -1,18 +1,25 @@
-import { ConflictException, Injectable } from '@nestjs/common';
-import { CreateSupplierDto } from './dto/create-supplier.dto';
+import { ConflictException, Inject, Injectable, Scope } from '@nestjs/common';
+import {
+  CreateSupplierDto,
+  SupplementaryInformationDto,
+} from './dto/supplier.dto';
 import { UpdateSupplierDto } from './dto/update-supplier.dto';
 import { SupplierEntity } from './entities/supplier.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CategoryService } from '../category/category.service';
 import { SupplierOtpService } from './supplier_otp.service';
+import { Request } from 'express';
+import { REQUEST } from '@nestjs/core';
+import { SupplementaryStatus } from './enum/status.enum';
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class SupplierService {
   constructor(
     @InjectRepository(SupplierEntity)
     private supplierRepository: Repository<SupplierEntity>,
     private supplierOtpService: SupplierOtpService,
+    @Inject(REQUEST) private req: Request,
   ) {}
   async create(createSupplierDto: CreateSupplierDto) {
     const {
@@ -69,7 +76,34 @@ export class SupplierService {
   update(id: number, updateSupplierDto: UpdateSupplierDto) {
     return `This action updates a #${id} supplier`;
   }
+  async saveSapplementaryInformation(infoDto: SupplementaryInformationDto) {
+    const id = this.req?.user?.id;
+    const { email, national_code } = infoDto;
+    let supplier = await this.supplierRepository.findOneBy({ email });
+    if (supplier && supplier.id !== id) {
+      throw new ConflictException(
+        'this supplier with this email already exist',
+      );
+    }
+    supplier = await this.supplierRepository.findOneBy({ national_code });
 
+    if (supplier && supplier.id !== id) {
+      throw new ConflictException(
+        'this supplier with this national_code already exist',
+      );
+    }
+    await this.supplierRepository.update(
+      { id },
+      {
+        email,
+        national_code,
+        status: SupplementaryStatus.SupplemntaryInformation,
+      },
+    );
+    return {
+      message: 'supplementary information updated succesfully',
+    };
+  }
   remove(id: number) {
     return `This action removes a #${id} supplier`;
   }

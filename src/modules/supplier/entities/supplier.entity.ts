@@ -11,6 +11,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { SupplierOTPEntity } from './supplier_otp.entity';
+import { SupplementaryStatus } from '../enum/status.enum';
 
 @Entity(EntityEnums.Supplier)
 export class SupplierEntity {
@@ -38,6 +39,12 @@ export class SupplierEntity {
     onDelete: 'SET NULL',
   })
   category: CategoryEntity;
+  @Column({ nullable: true })
+  email: string;
+  @Column({ nullable: true })
+  national_code: string;
+  @Column({ nullable: true, default: SupplementaryStatus.SignUp })
+  status: string;
   @Column({ nullable: true })
   agentId: number;
   @ManyToOne(() => SupplierEntity, (supplier) => supplier.subsets)

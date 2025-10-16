@@ -1,5 +1,5 @@
 import { SupplierService } from './supplier.service';
-import { CreateSupplierDto } from './dto/create-supplier.dto';
+import { CreateSupplierDto } from './dto/supplier.dto';
 import { UpdateSupplierDto } from './dto/update-supplier.dto';
 export declare class SupplierController {
     private readonly supplierService;
