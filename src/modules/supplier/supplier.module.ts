@@ -5,9 +5,14 @@ import { SupplierEntity } from './entities/supplier.entity';
 import { SupplierOTPEntity } from './entities/supplier_otp.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SupplierOtpService } from './supplier_otp.service';
+import { AuthService } from '../auth/auth.services';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([SupplierEntity, SupplierOTPEntity])],
+  imports: [
+    TypeOrmModule.forFeature([SupplierEntity, SupplierOTPEntity]),
+    AuthModule,
+  ],
   controllers: [SupplierController],
   providers: [SupplierService, SupplierOtpService],
 })

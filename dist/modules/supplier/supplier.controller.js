@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const supplier_service_1 = require("./supplier.service");
 const supplier_dto_1 = require("./dto/supplier.dto");
 const update_supplier_dto_1 = require("./dto/update-supplier.dto");
+const auth_decorator_1 = require("../../common/decorators/auth.decorator");
 let SupplierController = class SupplierController {
     supplierService;
     constructor(supplierService) {
@@ -24,6 +25,17 @@ let SupplierController = class SupplierController {
     }
     create(createSupplierDto) {
         return this.supplierService.create(createSupplierDto);
+    }
+    supplementaryInformation(supplementaryInformationDto) {
+        try {
+            return this.supplierService.saveSapplementaryInformation(supplementaryInformationDto);
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+    signup() {
+        return this.supplierService.create;
     }
     findAll() {
         return this.supplierService.findAll();
@@ -46,6 +58,14 @@ __decorate([
     __metadata("design:paramtypes", [supplier_dto_1.CreateSupplierDto]),
     __metadata("design:returntype", void 0)
 ], SupplierController.prototype, "create", null);
+__decorate([
+    (0, common_1.Post)('send-supplementary-information'),
+    (0, auth_decorator_1.SupplierAuth)(),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [supplier_dto_1.SupplementaryInformationDto]),
+    __metadata("design:returntype", void 0)
+], SupplierController.prototype, "supplementaryInformation", null);
 __decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),
