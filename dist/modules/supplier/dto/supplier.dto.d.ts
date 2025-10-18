@@ -13,3 +13,7 @@ export declare class SupplementaryInformationDto {
     national_code: string;
     email: string;
 }
+export declare class UploadDocsDto {
+    acceptedDoc: string;
+    image: string;
+}

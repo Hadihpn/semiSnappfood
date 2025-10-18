@@ -47,6 +47,10 @@ export class SupplierEntity {
   status: string;
   @Column({ nullable: true })
   agentId: number;
+  @Column({ nullable: true })
+  image: string;
+  @Column({ nullable: true })
+  document: string;
   @ManyToOne(() => SupplierEntity, (supplier) => supplier.subsets)
   agent: SupplierEntity;
   @OneToMany(() => SupplierEntity, (supplier) => supplier.agent)

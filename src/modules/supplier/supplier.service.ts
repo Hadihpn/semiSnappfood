@@ -1,4 +1,10 @@
-import { ConflictException, Inject, Injectable, Scope } from '@nestjs/common';
+import {
+  ConflictException,
+  Inject,
+  Injectable,
+  NotFoundException,
+  Scope,
+} from '@nestjs/common';
 import {
   CreateSupplierDto,
   SupplementaryInformationDto,
@@ -7,11 +13,12 @@ import { UpdateSupplierDto } from './dto/update-supplier.dto';
 import { SupplierEntity } from './entities/supplier.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CategoryService } from '../category/category.service';
 import { SupplierOtpService } from './supplier_otp.service';
 import { Request } from 'express';
 import { REQUEST } from '@nestjs/core';
 import { SupplementaryStatus } from './enum/status.enum';
+import { DocumentType } from './types';
+import { S3Services } from '../s3/s3.services';
 
 @Injectable({ scope: Scope.REQUEST })
 export class SupplierService {
@@ -20,6 +27,7 @@ export class SupplierService {
     private supplierRepository: Repository<SupplierEntity>,
     private supplierOtpService: SupplierOtpService,
     @Inject(REQUEST) private req: Request,
+    private s3Service: S3Services,
   ) {}
   async create(createSupplierDto: CreateSupplierDto) {
     const {
@@ -66,8 +74,10 @@ export class SupplierService {
     return `This action returns all supplier`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} supplier`;
+  async findOne(id: number) {
+    const supplier = await this.supplierRepository.findOneBy({ id });
+    if (!supplier) throw new NotFoundException('supplier not found');
+    return supplier;
   }
   async findOneByMobile(mobile: string) {
     return await this.supplierRepository.findOneBy({ mobile });
@@ -106,5 +116,24 @@ export class SupplierService {
   }
   remove(id: number) {
     return `This action removes a #${id} supplier`;
+  }
+  async uploadDocuments(files: DocumentType) {
+    const id = this.req?.user?.id;
+    if(!id) throw new NotFoundException('supplier not found');
+    const supplier = await this.findOne(id);
+    const { image, acceptedDoc } = files;
+    const imageResult = await this.s3Service.uploadFile(
+      image[0],
+      'supplier/images',
+    );
+    const acceptedDocResult = await this.s3Service.uploadFile(
+      acceptedDoc[0],
+      'supplier/acceptedDocs',
+    );
+  if(imageResult) supplier.image = imageResult.Location;
+  if(acceptedDocResult) supplier.document = acceptedDocResult.Location;
+  supplier.status = SupplementaryStatus.UploadedDocument;
+  await this.supplierRepository.save(supplier);
+    console.log(files);
   }
 }

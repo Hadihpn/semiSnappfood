@@ -13,9 +13,13 @@ import { SupplierOtpService } from "../supplier/supplier_otp.service";
 import { SupplierEntity } from "../supplier/entities/supplier.entity";
 import { SupplierOTPEntity } from "../supplier/entities/supplier_otp.entity";
 import { CategoryEntity } from "../category/entities/category.entity";
+import { S3Module } from "../s3/s3.module";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity, OTPEntity,SupplierEntity,SupplierOTPEntity,CategoryEntity])],
+  imports: [
+    TypeOrmModule.forFeature([UserEntity, OTPEntity,SupplierEntity,SupplierOTPEntity,CategoryEntity]),
+    S3Module
+  ],
   controllers: [AuthController],
   providers: [AuthService, JwtService,UserService,OtpService,SupplierService,SupplierOtpService],
   exports: [AuthService, JwtService, TypeOrmModule],

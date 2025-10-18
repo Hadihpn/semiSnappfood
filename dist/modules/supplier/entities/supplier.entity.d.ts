@@ -16,6 +16,8 @@ export declare class SupplierEntity {
     national_code: string;
     status: string;
     agentId: number;
+    image: string;
+    document: string;
     agent: SupplierEntity;
     subsets: SupplierEntity[];
     otp: SupplierOTPEntity;

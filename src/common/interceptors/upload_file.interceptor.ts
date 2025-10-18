@@ -1,10 +1,22 @@
-import { FileInterceptor } from '@nestjs/platform-express';
+import {
+  FileFieldsInterceptor,
+  FileInterceptor,
+} from '@nestjs/platform-express';
+import { MulterField } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
 import { memoryStorage } from 'multer';
 
 export function UploadFileS3(fieldName: string) {
-  console.log("UploadFileS3",fieldName);
-  
+  console.log('UploadFileS3', fieldName);
+
   return class UploadUtility extends FileInterceptor(fieldName, {
+    storage: memoryStorage(),
+  }) {};
+}
+
+export function UploadFileFieldsS3(uploadFields: MulterField[]) {
+  console.log("uploadFields",uploadFields);
+  
+  return class UploadUtility extends FileFieldsInterceptor(uploadFields, {
     storage: memoryStorage(),
   }) {};
 }

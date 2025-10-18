@@ -1,5 +1,5 @@
 import { SupplierService } from './supplier.service';
-import { CreateSupplierDto, SupplementaryInformationDto } from './dto/supplier.dto';
+import { CreateSupplierDto, SupplementaryInformationDto, UploadDocsDto } from './dto/supplier.dto';
 import { UpdateSupplierDto } from './dto/update-supplier.dto';
 export declare class SupplierController {
     private readonly supplierService;
@@ -9,8 +9,9 @@ export declare class SupplierController {
         message: string;
     }> | undefined;
     signup(): (createSupplierDto: CreateSupplierDto) => Promise<import("./entities/supplier.entity").SupplierEntity>;
+    UploadDocument(infoDto: UploadDocsDto, file: any): Promise<void>;
     findAll(): string;
-    findOne(id: string): string;
+    findOne(id: string): Promise<import("./entities/supplier.entity").SupplierEntity>;
     update(id: string, updateSupplierSignupDto: UpdateSupplierDto): string;
     remove(id: string): string;
 }

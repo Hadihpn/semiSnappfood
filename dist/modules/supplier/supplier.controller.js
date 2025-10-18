@@ -18,6 +18,9 @@ const supplier_service_1 = require("./supplier.service");
 const supplier_dto_1 = require("./dto/supplier.dto");
 const update_supplier_dto_1 = require("./dto/update-supplier.dto");
 const auth_decorator_1 = require("../../common/decorators/auth.decorator");
+const upload_file_interceptor_1 = require("../../common/interceptors/upload_file.interceptor");
+const swagger_1 = require("@nestjs/swagger");
+const form_type_enum_1 = require("../../common/enums/form-type.enum");
 let SupplierController = class SupplierController {
     supplierService;
     constructor(supplierService) {
@@ -36,6 +39,9 @@ let SupplierController = class SupplierController {
     }
     signup() {
         return this.supplierService.create;
+    }
+    async UploadDocument(infoDto, file) {
+        return this.supplierService.uploadDocuments(file);
     }
     findAll() {
         return this.supplierService.findAll();
@@ -66,6 +72,20 @@ __decorate([
     __metadata("design:paramtypes", [supplier_dto_1.SupplementaryInformationDto]),
     __metadata("design:returntype", void 0)
 ], SupplierController.prototype, "supplementaryInformation", null);
+__decorate([
+    (0, common_1.Put)('upload-documents'),
+    (0, swagger_1.ApiConsumes)(form_type_enum_1.FormType.Multipart),
+    (0, auth_decorator_1.SupplierAuth)(),
+    (0, common_1.UseInterceptors)((0, upload_file_interceptor_1.UploadFileFieldsS3)([
+        { name: 'acceptedDoc', maxCount: 1 },
+        { name: 'image', maxCount: 1 },
+    ])),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.UploadedFiles)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [supplier_dto_1.UploadDocsDto, Object]),
+    __metadata("design:returntype", Promise)
+], SupplierController.prototype, "UploadDocument", null);
 __decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),

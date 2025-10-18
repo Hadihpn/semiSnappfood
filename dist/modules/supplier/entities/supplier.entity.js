@@ -31,6 +31,8 @@ let SupplierEntity = class SupplierEntity {
     national_code;
     status;
     agentId;
+    image;
+    document;
     agent;
     subsets;
     otp;
@@ -98,6 +100,14 @@ __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", Number)
 ], SupplierEntity.prototype, "agentId", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], SupplierEntity.prototype, "image", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], SupplierEntity.prototype, "document", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => SupplierEntity, (supplier) => supplier.subsets),
     __metadata("design:type", SupplierEntity)

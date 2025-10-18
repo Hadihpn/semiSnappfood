@@ -20,14 +20,17 @@ const typeorm_2 = require("@nestjs/typeorm");
 const supplier_otp_service_1 = require("./supplier_otp.service");
 const core_1 = require("@nestjs/core");
 const status_enum_1 = require("./enum/status.enum");
+const s3_services_1 = require("../s3/s3.services");
 let SupplierService = class SupplierService {
     supplierRepository;
     supplierOtpService;
     req;
-    constructor(supplierRepository, supplierOtpService, req) {
+    s3Service;
+    constructor(supplierRepository, supplierOtpService, req, s3Service) {
         this.supplierRepository = supplierRepository;
         this.supplierOtpService = supplierOtpService;
         this.req = req;
+        this.s3Service = s3Service;
     }
     async create(createSupplierDto) {
         const { categoryId, city, invite_code, manager_family, manager_name, mobile, store_name, otp_code, otp_expires_in, } = createSupplierDto;
@@ -59,8 +62,11 @@ let SupplierService = class SupplierService {
     findAll() {
         return `This action returns all supplier`;
     }
-    findOne(id) {
-        return `This action returns a #${id} supplier`;
+    async findOne(id) {
+        const supplier = await this.supplierRepository.findOneBy({ id });
+        if (!supplier)
+            throw new common_1.NotFoundException('supplier not found');
+        return supplier;
     }
     async findOneByMobile(mobile) {
         return await this.supplierRepository.findOneBy({ mobile });
@@ -91,6 +97,22 @@ let SupplierService = class SupplierService {
     remove(id) {
         return `This action removes a #${id} supplier`;
     }
+    async uploadDocuments(files) {
+        const id = this.req?.user?.id;
+        if (!id)
+            throw new common_1.NotFoundException('supplier not found');
+        const supplier = await this.findOne(id);
+        const { image, acceptedDoc } = files;
+        const imageResult = await this.s3Service.uploadFile(image[0], 'supplier/images');
+        const acceptedDocResult = await this.s3Service.uploadFile(acceptedDoc[0], 'supplier/acceptedDocs');
+        if (imageResult)
+            supplier.image = imageResult.Location;
+        if (acceptedDocResult)
+            supplier.document = acceptedDocResult.Location;
+        supplier.status = status_enum_1.SupplementaryStatus.UploadedDocument;
+        await this.supplierRepository.save(supplier);
+        console.log(files);
+    }
 };
 exports.SupplierService = SupplierService;
 exports.SupplierService = SupplierService = __decorate([
@@ -98,6 +120,6 @@ exports.SupplierService = SupplierService = __decorate([
     __param(0, (0, typeorm_2.InjectRepository)(supplier_entity_1.SupplierEntity)),
     __param(2, (0, common_1.Inject)(core_1.REQUEST)),
     __metadata("design:paramtypes", [typeorm_1.Repository,
-        supplier_otp_service_1.SupplierOtpService, Object])
+        supplier_otp_service_1.SupplierOtpService, Object, s3_services_1.S3Services])
 ], SupplierService);
 //# sourceMappingURL=supplier.service.js.map

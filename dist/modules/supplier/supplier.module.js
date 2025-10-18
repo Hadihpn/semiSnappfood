@@ -15,14 +15,17 @@ const supplier_otp_entity_1 = require("./entities/supplier_otp.entity");
 const typeorm_1 = require("@nestjs/typeorm");
 const supplier_otp_service_1 = require("./supplier_otp.service");
 const auth_module_1 = require("../auth/auth.module");
+const category_entity_1 = require("../category/entities/category.entity");
+const s3_module_1 = require("../s3/s3.module");
 let SupplierModule = class SupplierModule {
 };
 exports.SupplierModule = SupplierModule;
 exports.SupplierModule = SupplierModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            typeorm_1.TypeOrmModule.forFeature([supplier_entity_1.SupplierEntity, supplier_otp_entity_1.SupplierOTPEntity]),
+            typeorm_1.TypeOrmModule.forFeature([supplier_entity_1.SupplierEntity, supplier_otp_entity_1.SupplierOTPEntity, category_entity_1.CategoryEntity]),
             auth_module_1.AuthModule,
+            s3_module_1.S3Module
         ],
         controllers: [supplier_controller_1.SupplierController],
         providers: [supplier_service_1.SupplierService, supplier_otp_service_1.SupplierOtpService],

@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SupplementaryInformationDto = exports.CreateSupplierDto = void 0;
+exports.UploadDocsDto = exports.SupplementaryInformationDto = exports.CreateSupplierDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 class CreateSupplierDto {
@@ -79,4 +79,17 @@ __decorate([
     (0, class_validator_1.IsEmail)(),
     __metadata("design:type", String)
 ], SupplementaryInformationDto.prototype, "email", void 0);
+class UploadDocsDto {
+    acceptedDoc;
+    image;
+}
+exports.UploadDocsDto = UploadDocsDto;
+__decorate([
+    (0, swagger_1.ApiProperty)({ format: 'binary' }),
+    __metadata("design:type", String)
+], UploadDocsDto.prototype, "acceptedDoc", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ format: 'binary' }),
+    __metadata("design:type", String)
+], UploadDocsDto.prototype, "image", void 0);
 //# sourceMappingURL=supplier.dto.js.map
