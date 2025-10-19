@@ -15,6 +15,8 @@ const category_entity_1 = require("../../category/entities/category.entity");
 const typeorm_1 = require("typeorm");
 const supplier_otp_entity_1 = require("./supplier_otp.entity");
 const status_enum_1 = require("../enum/status.enum");
+const type_entity_1 = require("../../menu/entities/type.entity");
+const menu_entity_1 = require("../../menu/entities/menu.entity");
 let SupplierEntity = class SupplierEntity {
     id;
     manager_name;
@@ -35,6 +37,8 @@ let SupplierEntity = class SupplierEntity {
     document;
     agent;
     subsets;
+    menu;
+    menuTypes;
     otp;
 };
 exports.SupplierEntity = SupplierEntity;
@@ -116,6 +120,14 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => SupplierEntity, (supplier) => supplier.agent),
     __metadata("design:type", Array)
 ], SupplierEntity.prototype, "subsets", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => menu_entity_1.MenuEntity, (food) => food.supplier),
+    __metadata("design:type", Array)
+], SupplierEntity.prototype, "menu", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => type_entity_1.TypeEntity, (type) => type.supplier),
+    __metadata("design:type", Array)
+], SupplierEntity.prototype, "menuTypes", void 0);
 __decorate([
     (0, typeorm_1.OneToOne)(() => supplier_otp_entity_1.SupplierOTPEntity, (otp) => otp.supplier),
     (0, typeorm_1.JoinColumn)(),

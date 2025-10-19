@@ -9,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
 import { AuthModule } from './modules/auth/auth.module';
 import { SupplierModule } from './modules/supplier/supplier.module';
+import { MenuModule } from './modules/menu/menu.module';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { SupplierModule } from './modules/supplier/supplier.module';
     UserModule,
     CategoryModule,
     AuthModule,
-    SupplierModule
+    SupplierModule,
+    MenuModule
   ],
   controllers: [AppController],
   providers: [AppService],
