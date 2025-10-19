@@ -15,6 +15,7 @@ const typeorm_1 = require("typeorm");
 const address_entity_1 = require("./address.entity");
 const base_entity_1 = require("../../../common/abstracts/base.entity");
 const otp_entity_1 = require("./otp.entity");
+const feedback_entity_1 = require("../../menu/entities/feedback.entity");
 let UserEntity = class UserEntity extends base_entity_1.BaseEntity {
     full_name;
     last_name;
@@ -28,6 +29,7 @@ let UserEntity = class UserEntity extends base_entity_1.BaseEntity {
     created_at;
     updated_at;
     addressList;
+    feedbacks;
     otp;
 };
 exports.UserEntity = UserEntity;
@@ -79,6 +81,10 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => address_entity_1.UserAddress, (address) => address.user),
     __metadata("design:type", Array)
 ], UserEntity.prototype, "addressList", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => feedback_entity_1.FeedbackEntity, (feedbak) => feedbak.user),
+    __metadata("design:type", Array)
+], UserEntity.prototype, "feedbacks", void 0);
 __decorate([
     (0, typeorm_1.OneToOne)(() => otp_entity_1.OTPEntity, (otp) => otp.user),
     (0, typeorm_1.JoinColumn)(),

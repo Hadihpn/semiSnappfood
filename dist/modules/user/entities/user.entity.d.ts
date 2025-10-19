@@ -1,6 +1,7 @@
 import { UserAddress } from './address.entity';
 import { BaseEntity } from 'src/common/abstracts/base.entity';
 import { OTPEntity } from './otp.entity';
+import { FeedbackEntity } from 'src/modules/menu/entities/feedback.entity';
 export declare class UserEntity extends BaseEntity {
     full_name: string;
     last_name: string;
@@ -14,5 +15,6 @@ export declare class UserEntity extends BaseEntity {
     created_at: Date;
     updated_at: Date;
     addressList: UserAddress[];
+    feedbacks: FeedbackEntity[];
     otp: OTPEntity;
 }

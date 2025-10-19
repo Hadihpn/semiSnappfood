@@ -11,6 +11,7 @@ import {
 import { UserAddress } from './address.entity';
 import { BaseEntity } from 'src/common/abstracts/base.entity';
 import { OTPEntity } from './otp.entity';
+import { FeedbackEntity } from 'src/modules/menu/entities/feedback.entity';
 
 @Entity(EntityEnums.User)
 export class UserEntity extends BaseEntity {
@@ -38,6 +39,8 @@ export class UserEntity extends BaseEntity {
   updated_at: Date;
   @OneToMany(() => UserAddress, (address) => address.user)
   addressList: UserAddress[];
+  @OneToMany(() => FeedbackEntity, (feedbak) => feedbak.user)
+  feedbacks: FeedbackEntity[];
   //   @OneToOne(()=>User,user=>user.agentId)
   //   subset:number
   @OneToOne(() => OTPEntity, (otp) => otp.user)
