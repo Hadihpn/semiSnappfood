@@ -7,4 +7,5 @@ export declare class FeedbackEntity {
     comment: string;
     user: UserEntity;
     food: MenuEntity;
+    created_at: Date;
 }

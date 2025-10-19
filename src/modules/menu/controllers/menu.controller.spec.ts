@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MenuController } from './menu.controller';
-import { MenuService } from './service/menu.service';
+import { MenuService } from '../service/menu.service';
 
 describe('MenuController', () => {
   let controller: MenuController;

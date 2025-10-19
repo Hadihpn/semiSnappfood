@@ -21,15 +21,18 @@ const supplier_otp_service_1 = require("./supplier_otp.service");
 const core_1 = require("@nestjs/core");
 const status_enum_1 = require("./enum/status.enum");
 const s3_services_1 = require("../s3/s3.services");
+const jwt_1 = require("@nestjs/jwt");
 let SupplierService = class SupplierService {
     supplierRepository;
     supplierOtpService;
     req;
+    jwtService;
     s3Service;
-    constructor(supplierRepository, supplierOtpService, req, s3Service) {
+    constructor(supplierRepository, supplierOtpService, req, jwtService, s3Service) {
         this.supplierRepository = supplierRepository;
         this.supplierOtpService = supplierOtpService;
         this.req = req;
+        this.jwtService = jwtService;
         this.s3Service = s3Service;
     }
     async create(createSupplierDto) {
@@ -113,6 +116,31 @@ let SupplierService = class SupplierService {
         await this.supplierRepository.save(supplier);
         console.log(files);
     }
+    async validateAccessToken(token) {
+        try {
+            const payload = this.jwtService.verify(token, {
+                secret: process.env.ACCESS_TOKEN_SECRET,
+            });
+            if (typeof payload === "object" && payload?.id) {
+                const supplier = await this.supplierRepository.findOneBy({
+                    id: payload.id,
+                });
+                if (!supplier) {
+                    throw new common_1.UnauthorizedException("login on your account ");
+                }
+                return {
+                    id: supplier.id,
+                    first_name: supplier.manager_name,
+                    last_name: supplier.manager_family,
+                    mobile: supplier.mobile,
+                };
+            }
+            throw new common_1.UnauthorizedException("login on your account ");
+        }
+        catch (error) {
+            throw new common_1.UnauthorizedException("login on your account ");
+        }
+    }
 };
 exports.SupplierService = SupplierService;
 exports.SupplierService = SupplierService = __decorate([
@@ -120,6 +148,7 @@ exports.SupplierService = SupplierService = __decorate([
     __param(0, (0, typeorm_2.InjectRepository)(supplier_entity_1.SupplierEntity)),
     __param(2, (0, common_1.Inject)(core_1.REQUEST)),
     __metadata("design:paramtypes", [typeorm_1.Repository,
-        supplier_otp_service_1.SupplierOtpService, Object, s3_services_1.S3Services])
+        supplier_otp_service_1.SupplierOtpService, Object, jwt_1.JwtService,
+        s3_services_1.S3Services])
 ], SupplierService);
 //# sourceMappingURL=supplier.service.js.map

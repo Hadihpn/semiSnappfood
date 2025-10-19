@@ -20,7 +20,7 @@ export class MenuEntity {
   image: string;
   @Column({ type: 'double' })
   price: number;
-  @Column({ type: 'double' })
+  @Column({ type: 'double', default: 0 })
   dicsount: number;
   @Column()
   description: string;

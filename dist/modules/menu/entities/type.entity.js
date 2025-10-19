@@ -17,6 +17,7 @@ const menu_entity_1 = require("./menu.entity");
 let TypeEntity = class TypeEntity {
     id;
     title;
+    priority;
     supplierId;
     supplier;
     items;
@@ -30,6 +31,10 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], TypeEntity.prototype, "title", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: 0 }),
+    __metadata("design:type", Number)
+], TypeEntity.prototype, "priority", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Number)

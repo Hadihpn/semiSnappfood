@@ -1,8 +1,10 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { MenuService } from './service/menu.service';
-import { CreateMenuDto } from './dto/food.dto';
+import { MenuService } from '../service/menu.service';
+import { CreateMenuDto } from '../dto/food.dto';
+import { SupplierAuth } from 'src/common/decorators/auth.decorator';
 
 @Controller('menu')
+
 export class MenuController {
   constructor(private readonly menuService: MenuService) {}
 

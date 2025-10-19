@@ -21,6 +21,7 @@ let FeedbackEntity = class FeedbackEntity {
     comment;
     user;
     food;
+    created_at;
 };
 exports.FeedbackEntity = FeedbackEntity;
 __decorate([
@@ -51,6 +52,10 @@ __decorate([
     }),
     __metadata("design:type", menu_entity_1.MenuEntity)
 ], FeedbackEntity.prototype, "food", void 0);
+__decorate([
+    (0, typeorm_1.CreateDateColumn)(),
+    __metadata("design:type", Date)
+], FeedbackEntity.prototype, "created_at", void 0);
 exports.FeedbackEntity = FeedbackEntity = __decorate([
     (0, typeorm_1.Entity)(entity_name_enum_1.EntityEnums.Feedbacks)
 ], FeedbackEntity);

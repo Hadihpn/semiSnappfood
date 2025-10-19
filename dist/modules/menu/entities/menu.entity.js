@@ -46,7 +46,7 @@ __decorate([
     __metadata("design:type", Number)
 ], MenuEntity.prototype, "price", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'double' }),
+    (0, typeorm_1.Column)({ type: 'double', default: 0 }),
     __metadata("design:type", Number)
 ], MenuEntity.prototype, "dicsount", void 0);
 __decorate([

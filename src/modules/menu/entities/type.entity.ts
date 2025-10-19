@@ -15,6 +15,8 @@ export class TypeEntity {
   id: number;
   @Column()
   title: string;
+  @Column({ default: 0 })
+  priority: number;
   @Column()
   supplierId: number;
   @ManyToOne(() => SupplierEntity, (supplier) => supplier.menuTypes, {

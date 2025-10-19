@@ -1,6 +1,12 @@
 import { EntityEnums } from 'src/common/enums/entity-name.enum';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { MenuEntity } from './menu.entity';
 
 @Entity(EntityEnums.Feedbacks)
@@ -21,4 +27,6 @@ export class FeedbackEntity {
     onDelete: 'CASCADE',
   })
   food: MenuEntity;
+  @CreateDateColumn()
+  created_at: Date;
 }
