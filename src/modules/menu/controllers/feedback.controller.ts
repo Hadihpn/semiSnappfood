@@ -1,20 +1,20 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { MenuService } from '../service/menu.service';
-import { CreateMenuDto } from '../dto/food.dto';
+import { FoodDto } from '../dto/food.dto';
 
 @Controller('feedback')
 export class FeedbackController {
   constructor(private readonly menuService: MenuService) {}
 
   @Post()
-  create(@Body() createMenuDto: CreateMenuDto) {
-    return this.menuService.create(createMenuDto);
+  create(@Body() foodDto: FoodDto) {
+    return "this.menuService.create(foodDto)";
   }
 
-  @Get()
-  findAll() {
-    return this.menuService.findAll();
-  }
+  // @Get()
+  // findAll() {
+  //   return this.menuService.findAll();
+  // }
 
   @Get(':id')
   findOne(@Param('id') id: string) {

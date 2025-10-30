@@ -4,12 +4,15 @@ import { FeedbackEntity } from './feedback.entity';
 export declare class MenuEntity {
     id: number;
     name: string;
+    key: string;
+    discount: number;
     image: string;
     price: number;
     dicsount: number;
     description: string;
     score: number;
     typeId: number;
+    supplierId: number;
     supplier: SupplierEntity;
     type: TypeEntity;
     feedbacks: FeedbackEntity[];

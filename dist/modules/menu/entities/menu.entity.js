@@ -18,12 +18,15 @@ const feedback_entity_1 = require("./feedback.entity");
 let MenuEntity = class MenuEntity {
     id;
     name;
+    key;
+    discount;
     image;
     price;
     dicsount;
     description;
     score;
     typeId;
+    supplierId;
     supplier;
     type;
     feedbacks;
@@ -37,6 +40,14 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], MenuEntity.prototype, "name", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], MenuEntity.prototype, "key", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'double', default: 0 }),
+    __metadata("design:type", Number)
+], MenuEntity.prototype, "discount", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
@@ -61,6 +72,10 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], MenuEntity.prototype, "typeId", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", Number)
+], MenuEntity.prototype, "supplierId", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => supplier_entity_1.SupplierEntity, (supplier) => supplier.menu, {
         onDelete: 'CASCADE',

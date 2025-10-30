@@ -19,6 +19,7 @@ let FeedbackEntity = class FeedbackEntity {
     userId;
     foodId;
     comment;
+    score;
     user;
     food;
     created_at;
@@ -40,6 +41,10 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], FeedbackEntity.prototype, "comment", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", Number)
+], FeedbackEntity.prototype, "score", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => user_entity_1.UserEntity, (user) => user.feedbacks, {
         onDelete: 'CASCADE',

@@ -9,10 +9,11 @@ import { FeedbackController } from './controllers/feedback.controller';
 import { MenuTypeController } from './controllers/type.controller';
 import { MenuTypeService } from './service/type.service';
 import { AuthModule } from '../auth/auth.module';
+import { S3Services } from '../s3/s3.services';
 
 @Module({
   imports:[TypeOrmModule.forFeature([FeedbackEntity,MenuEntity,TypeEntity]),AuthModule],
   controllers: [MenuController,FeedbackController,MenuTypeController],
-  providers: [MenuService,MenuTypeService],
+  providers: [MenuService,MenuTypeService,S3Services],
 })
 export class MenuModule {}

@@ -17,6 +17,10 @@ export class MenuEntity {
   @Column()
   name: string;
   @Column()
+  key: string;
+  @Column({ type: 'double', default: 0 })
+  discount: number;
+  @Column()
   image: string;
   @Column({ type: 'double' })
   price: number;
@@ -28,6 +32,8 @@ export class MenuEntity {
   score: number;
   @Column()
   typeId: number;
+  @Column()
+  supplierId: number;
   @ManyToOne(() => SupplierEntity, (supplier) => supplier.menu, {
     onDelete: 'CASCADE',
   })

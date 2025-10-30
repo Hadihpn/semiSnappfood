@@ -21,11 +21,8 @@ let FeedbackController = class FeedbackController {
     constructor(menuService) {
         this.menuService = menuService;
     }
-    create(createMenuDto) {
-        return this.menuService.create(createMenuDto);
-    }
-    findAll() {
-        return this.menuService.findAll();
+    create(foodDto) {
+        return "this.menuService.create(foodDto)";
     }
     findOne(id) {
         return this.menuService.findOne(+id);
@@ -39,15 +36,9 @@ __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [food_dto_1.CreateMenuDto]),
+    __metadata("design:paramtypes", [food_dto_1.FoodDto]),
     __metadata("design:returntype", void 0)
 ], FeedbackController.prototype, "create", null);
-__decorate([
-    (0, common_1.Get)(),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], FeedbackController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),

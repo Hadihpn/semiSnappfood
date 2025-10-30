@@ -12,7 +12,6 @@ function UploadFileS3(fieldName) {
     };
 }
 function UploadFileFieldsS3(uploadFields) {
-    console.log("uploadFields", uploadFields);
     return class UploadUtility extends (0, platform_express_1.FileFieldsInterceptor)(uploadFields, {
         storage: (0, multer_1.memoryStorage)(),
     }) {

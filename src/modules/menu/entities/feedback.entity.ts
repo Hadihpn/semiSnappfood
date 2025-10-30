@@ -19,6 +19,8 @@ export class FeedbackEntity {
   foodId: number;
   @Column()
   comment: string;
+   @Column()
+  score: number;
   @ManyToOne(() => UserEntity, (user) => user.feedbacks, {
     onDelete: 'CASCADE',
   })

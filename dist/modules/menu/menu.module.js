@@ -18,6 +18,7 @@ const feedback_controller_1 = require("./controllers/feedback.controller");
 const type_controller_1 = require("./controllers/type.controller");
 const type_service_1 = require("./service/type.service");
 const auth_module_1 = require("../auth/auth.module");
+const s3_services_1 = require("../s3/s3.services");
 let MenuModule = class MenuModule {
 };
 exports.MenuModule = MenuModule;
@@ -25,7 +26,7 @@ exports.MenuModule = MenuModule = __decorate([
     (0, common_1.Module)({
         imports: [typeorm_1.TypeOrmModule.forFeature([feedback_entity_1.FeedbackEntity, menu_entity_1.MenuEntity, type_entity_1.TypeEntity]), auth_module_1.AuthModule],
         controllers: [menu_controller_1.MenuController, feedback_controller_1.FeedbackController, type_controller_1.MenuTypeController],
-        providers: [menu_service_1.MenuService, type_service_1.MenuTypeService],
+        providers: [menu_service_1.MenuService, type_service_1.MenuTypeService, s3_services_1.S3Services],
     })
 ], MenuModule);
 //# sourceMappingURL=menu.module.js.map

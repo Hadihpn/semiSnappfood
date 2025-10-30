@@ -14,8 +14,6 @@ export function UploadFileS3(fieldName: string) {
 }
 
 export function UploadFileFieldsS3(uploadFields: MulterField[]) {
-  console.log("uploadFields",uploadFields);
-  
   return class UploadUtility extends FileFieldsInterceptor(uploadFields, {
     storage: memoryStorage(),
   }) {};
