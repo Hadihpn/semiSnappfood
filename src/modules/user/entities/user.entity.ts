@@ -12,6 +12,7 @@ import { UserAddress } from './address.entity';
 import { BaseEntity } from 'src/common/abstracts/base.entity';
 import { OTPEntity } from './otp.entity';
 import { FeedbackEntity } from 'src/modules/menu/entities/feedback.entity';
+import { UserBasketEntity } from 'src/modules/basket/entities/basket.entity';
 
 @Entity(EntityEnums.User)
 export class UserEntity extends BaseEntity {
@@ -46,4 +47,6 @@ export class UserEntity extends BaseEntity {
   @OneToOne(() => OTPEntity, (otp) => otp.user)
   @JoinColumn()
   otp: OTPEntity;
+  @OneToMany(() => UserBasketEntity, (basket) => basket.user)
+  basket: UserBasketEntity[];
 }

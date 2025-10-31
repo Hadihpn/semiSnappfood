@@ -22,11 +22,14 @@ export class MenuService {
     private typeService: MenuTypeService,
     private s3Service: S3Services,
   ) {}
-  async create(image:Express.Multer.File,foodDto: FoodDto) {
-     const supplierId = this.req.user?.id;
-    const {name, description, discount, price, typeId} = foodDto;
+  async create(image: Express.Multer.File, foodDto: FoodDto) {
+    const supplierId = this.req.user?.id;
+    const { name, description, discount, price, typeId } = foodDto;
     const type = await this.typeService.findOneById(typeId);
-    const {Location, Key} = await this.s3Service.uploadFile(image, "menu-item");
+    const { Location, Key } = await this.s3Service.uploadFile(
+      image,
+      'menu-item',
+    );
     const item = this.menuRepository.create({
       name,
       description,
@@ -36,11 +39,10 @@ export class MenuService {
       supplierId,
       image: Location,
       key: Key,
-      
     });
     await this.menuRepository.save(item);
     return {
-      message: "create",
+      message: 'create',
     };
   }
   async findAll(supplierId: number) {
@@ -81,7 +83,7 @@ export class MenuService {
   }
   async checkExist(id: number) {
     const supplierId = this.req.user?.id;
-    const item = await this.menuRepository.findOneBy({ id,supplierId });
+    const item = await this.menuRepository.findOneBy({ id, supplierId });
     if (!item) throw new NotFoundException('menu not found');
     return item;
   }

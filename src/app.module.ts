@@ -10,6 +10,8 @@ import { join } from 'path';
 import { AuthModule } from './modules/auth/auth.module';
 import { SupplierModule } from './modules/supplier/supplier.module';
 import { MenuModule } from './modules/menu/menu.module';
+import { BasketModule } from './modules/basket/basket.module';
+import { DicountModule } from './modules/dicount/dicount.module';
 
 @Module({
   imports: [
@@ -21,7 +23,9 @@ import { MenuModule } from './modules/menu/menu.module';
     CategoryModule,
     AuthModule,
     SupplierModule,
-    MenuModule
+    MenuModule,
+    BasketModule,
+    DicountModule
   ],
   controllers: [AppController],
   providers: [AppService],
