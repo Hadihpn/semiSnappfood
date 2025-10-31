@@ -5,7 +5,7 @@ import { MenuEntity } from 'src/modules/menu/entities/menu.entity';
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity(EntityEnums.Discount)
-export class DicountEntity {
+export class DiscountEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
   @Column()

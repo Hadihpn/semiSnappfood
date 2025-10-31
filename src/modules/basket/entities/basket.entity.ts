@@ -1,5 +1,5 @@
 import { EntityEnums } from 'src/common/enums/entity-name.enum';
-import { DicountEntity } from 'src/modules/dicount/entities/dicount.entity';
+import { DiscountEntity } from 'src/modules/discount/entities/dicount.entity';
 import { MenuEntity } from 'src/modules/menu/entities/menu.entity';
 import { UserEntity } from 'src/modules/user/entities/user.entity';
 import {
@@ -31,8 +31,8 @@ export class UserBasketEntity {
   food: MenuEntity;
   @ManyToOne(() => UserEntity, (user) => user.basket, { onDelete: 'CASCADE' })
   user: UserEntity;
-  @ManyToOne(() => DicountEntity, (discount) => discount.baskets, {
+  @ManyToOne(() => DiscountEntity, (discount) => discount.baskets, {
     onDelete: 'CASCADE',
   })
-  discount: DicountEntity;
+  discount: DiscountEntity;
 }

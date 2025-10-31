@@ -11,7 +11,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { SupplierModule } from './modules/supplier/supplier.module';
 import { MenuModule } from './modules/menu/menu.module';
 import { BasketModule } from './modules/basket/basket.module';
-import { DicountModule } from './modules/dicount/dicount.module';
+import { DiscountModule } from './modules/discount/dicount.module';
 
 @Module({
   imports: [
@@ -25,7 +25,7 @@ import { DicountModule } from './modules/dicount/dicount.module';
     SupplierModule,
     MenuModule,
     BasketModule,
-    DicountModule
+    DiscountModule
   ],
   controllers: [AppController],
   providers: [AppService],
