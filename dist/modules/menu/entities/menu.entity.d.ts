@@ -1,6 +1,7 @@
 import { SupplierEntity } from 'src/modules/supplier/entities/supplier.entity';
 import { TypeEntity } from './type.entity';
 import { FeedbackEntity } from './feedback.entity';
+import { UserBasketEntity } from 'src/modules/basket/entities/basket.entity';
 export declare class MenuEntity {
     id: number;
     name: string;
@@ -16,4 +17,5 @@ export declare class MenuEntity {
     supplier: SupplierEntity;
     type: TypeEntity;
     feedbacks: FeedbackEntity[];
+    baskets: UserBasketEntity[];
 }

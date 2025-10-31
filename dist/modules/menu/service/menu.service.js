@@ -38,7 +38,7 @@ let MenuService = class MenuService {
         const supplierId = this.req.user?.id;
         const { name, description, discount, price, typeId } = foodDto;
         const type = await this.typeService.findOneById(typeId);
-        const { Location, Key } = await this.s3Service.uploadFile(image, "menu-item");
+        const { Location, Key } = await this.s3Service.uploadFile(image, 'menu-item');
         const item = this.menuRepository.create({
             name,
             description,
@@ -51,7 +51,7 @@ let MenuService = class MenuService {
         });
         await this.menuRepository.save(item);
         return {
-            message: "create",
+            message: 'create',
         };
     }
     async findAll(supplierId) {
@@ -106,6 +106,14 @@ let MenuService = class MenuService {
             throw new common_1.NotFoundException('menu not found');
         await this.menuRepository.delete(item);
         return `This action removes a menu successfully`;
+    }
+    async getOne(id) {
+        const item = await this.menuRepository.findOne({
+            where: { id },
+        });
+        if (!item)
+            throw new common_1.NotFoundException('menu not found');
+        return item;
     }
 };
 exports.MenuService = MenuService;

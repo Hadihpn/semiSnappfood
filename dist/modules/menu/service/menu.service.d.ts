@@ -20,4 +20,5 @@ export declare class MenuService {
     checkExist(id: number): Promise<MenuEntity>;
     update(id: number, foodDto: UpdateFoodDto, image: Express.Multer.File): string;
     remove(id: number): Promise<string>;
+    getOne(id: number): Promise<MenuEntity>;
 }

@@ -19,6 +19,8 @@ const path_1 = require("path");
 const auth_module_1 = require("./modules/auth/auth.module");
 const supplier_module_1 = require("./modules/supplier/supplier.module");
 const menu_module_1 = require("./modules/menu/menu.module");
+const basket_module_1 = require("./modules/basket/basket.module");
+const dicount_module_1 = require("./modules/discount/dicount.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -33,7 +35,9 @@ exports.AppModule = AppModule = __decorate([
             category_module_1.CategoryModule,
             auth_module_1.AuthModule,
             supplier_module_1.SupplierModule,
-            menu_module_1.MenuModule
+            menu_module_1.MenuModule,
+            basket_module_1.BasketModule,
+            dicount_module_1.DiscountModule
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

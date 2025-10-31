@@ -15,5 +15,6 @@ import { S3Services } from '../s3/s3.services';
   imports:[TypeOrmModule.forFeature([FeedbackEntity,MenuEntity,TypeEntity]),AuthModule],
   controllers: [MenuController,FeedbackController,MenuTypeController],
   providers: [MenuService,MenuTypeService,S3Services],
+  exports: [MenuService],
 })
 export class MenuModule {}

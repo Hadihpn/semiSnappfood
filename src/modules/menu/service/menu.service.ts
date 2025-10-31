@@ -98,4 +98,11 @@ export class MenuService {
     await this.menuRepository.delete(item);
     return `This action removes a menu successfully`;
   }
+  async getOne(id: number) {
+    const item = await this.menuRepository.findOne({
+      where: { id },
+    });
+    if (!item) throw new NotFoundException('menu not found');
+    return item;
+  }
 }

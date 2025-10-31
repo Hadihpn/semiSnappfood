@@ -15,6 +15,7 @@ const supplier_entity_1 = require("../../supplier/entities/supplier.entity");
 const typeorm_1 = require("typeorm");
 const type_entity_1 = require("./type.entity");
 const feedback_entity_1 = require("./feedback.entity");
+const basket_entity_1 = require("../../basket/entities/basket.entity");
 let MenuEntity = class MenuEntity {
     id;
     name;
@@ -30,6 +31,7 @@ let MenuEntity = class MenuEntity {
     supplier;
     type;
     feedbacks;
+    baskets;
 };
 exports.MenuEntity = MenuEntity;
 __decorate([
@@ -90,6 +92,10 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => feedback_entity_1.FeedbackEntity, (feedback) => feedback.food),
     __metadata("design:type", Array)
 ], MenuEntity.prototype, "feedbacks", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => basket_entity_1.UserBasketEntity, basket => basket.food),
+    __metadata("design:type", Array)
+], MenuEntity.prototype, "baskets", void 0);
 exports.MenuEntity = MenuEntity = __decorate([
     (0, typeorm_1.Entity)(entity_name_enum_1.EntityEnums.Menu)
 ], MenuEntity);

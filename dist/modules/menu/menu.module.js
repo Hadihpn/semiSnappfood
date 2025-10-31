@@ -27,6 +27,7 @@ exports.MenuModule = MenuModule = __decorate([
         imports: [typeorm_1.TypeOrmModule.forFeature([feedback_entity_1.FeedbackEntity, menu_entity_1.MenuEntity, type_entity_1.TypeEntity]), auth_module_1.AuthModule],
         controllers: [menu_controller_1.MenuController, feedback_controller_1.FeedbackController, type_controller_1.MenuTypeController],
         providers: [menu_service_1.MenuService, type_service_1.MenuTypeService, s3_services_1.S3Services],
+        exports: [menu_service_1.MenuService],
     })
 ], MenuModule);
 //# sourceMappingURL=menu.module.js.map

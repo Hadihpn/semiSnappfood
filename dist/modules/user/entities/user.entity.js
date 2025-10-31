@@ -16,6 +16,7 @@ const address_entity_1 = require("./address.entity");
 const base_entity_1 = require("../../../common/abstracts/base.entity");
 const otp_entity_1 = require("./otp.entity");
 const feedback_entity_1 = require("../../menu/entities/feedback.entity");
+const basket_entity_1 = require("../../basket/entities/basket.entity");
 let UserEntity = class UserEntity extends base_entity_1.BaseEntity {
     full_name;
     last_name;
@@ -31,6 +32,7 @@ let UserEntity = class UserEntity extends base_entity_1.BaseEntity {
     addressList;
     feedbacks;
     otp;
+    basket;
 };
 exports.UserEntity = UserEntity;
 __decorate([
@@ -90,6 +92,10 @@ __decorate([
     (0, typeorm_1.JoinColumn)(),
     __metadata("design:type", otp_entity_1.OTPEntity)
 ], UserEntity.prototype, "otp", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => basket_entity_1.UserBasketEntity, (basket) => basket.user),
+    __metadata("design:type", Array)
+], UserEntity.prototype, "basket", void 0);
 exports.UserEntity = UserEntity = __decorate([
     (0, typeorm_1.Entity)(entity_name_enum_1.EntityEnums.User)
 ], UserEntity);
