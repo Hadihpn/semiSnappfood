@@ -40,9 +40,6 @@ let BasketService = class BasketService {
     findOne(id) {
         return `This action returns a #${id} basket`;
     }
-    remove(id) {
-        return `This action removes a #${id} basket`;
-    }
     async addToBasket(createBasketDto) {
         const userId = this.req.user?.id;
         const { foodId } = createBasketDto;
@@ -65,13 +62,126 @@ let BasketService = class BasketService {
         }
         await this.basketRepository.save(basketItem);
         return {
-            message: "added food to your basket",
+            message: 'added food to your basket',
         };
     }
-    async removeFromBasket() { }
+    async removeFromBasket(basketDto) {
+        const userId = this.req.user?.id;
+        const { foodId } = basketDto;
+        const food = await this.menuService.getOne(foodId);
+        let basketItem = await this.basketRepository.findOne({
+            where: {
+                userId,
+                foodId,
+            },
+        });
+        if (basketItem) {
+            if (basketItem.count <= 1) {
+                await this.basketRepository.delete({ id: basketItem.id });
+            }
+            else {
+                basketItem.count -= 1;
+            }
+            await this.basketRepository.save(basketItem);
+            return {
+                message: 'remove item from basket successfully',
+            };
+        }
+        throw new common_1.NotFoundException('cannot find any item');
+    }
     async getBasket() { }
-    async addDiscount() { }
-    async removeDiscount() { }
+    async addDiscount(discountDto) {
+        const { code } = discountDto;
+        const userId = this.req.user?.id;
+        const discount = await this.discountService.findOneByCode(code);
+        if (!discount.active) {
+            throw new common_1.BadRequestException('This discount code is not active');
+        }
+        if (discount.limit && discount.limit <= discount.usage) {
+            throw new common_1.BadRequestException('The capacity of this discount code is full');
+        }
+        if (discount?.expires_in &&
+            discount?.expires_in?.getTime() <= new Date().getTime()) {
+            throw new common_1.BadRequestException('this discount code is expired');
+        }
+        const userBasketDiscount = await this.basketRepository.findOneBy({
+            discountId: discount.id,
+            userId,
+        });
+        if (userBasketDiscount) {
+            throw new common_1.BadRequestException('Already used discount');
+        }
+        if (discount.supplierId) {
+            const discountOfSupplier = await this.basketRepository.findOne({
+                relations: {
+                    discount: true,
+                },
+                where: {
+                    userId,
+                    discount: {
+                        supplierId: discount.supplierId,
+                    },
+                },
+            });
+            if (discountOfSupplier) {
+                throw new common_1.BadRequestException('you can not use several of supplier discount ');
+            }
+            const userBasket = await this.basketRepository.findOne({
+                relations: {
+                    food: true,
+                },
+                where: {
+                    userId,
+                    food: {
+                        supplierId: discount.supplierId,
+                    },
+                },
+            });
+            if (!userBasket) {
+                throw new common_1.BadRequestException('you can not use this discount code in basket');
+            }
+        }
+        else if (!discount.supplierId) {
+            const generalDiscount = await this.basketRepository.findOne({
+                relations: {
+                    discount: true,
+                },
+                where: {
+                    userId,
+                    discount: {
+                        id: (0, typeorm_2.Not)((0, typeorm_2.IsNull)()),
+                        supplierId: (0, typeorm_2.IsNull)(),
+                    },
+                },
+            });
+            if (generalDiscount) {
+                throw new common_1.BadRequestException('Already used general discount');
+            }
+        }
+        await this.basketRepository.insert({
+            discountId: discount.id,
+            userId,
+        });
+        return {
+            message: 'You added discount code successfully',
+        };
+    }
+    async removeDiscount(discountDto) {
+        const { code } = discountDto;
+        const userId = this.req.user?.id;
+        const discount = await this.discountService.findOneByCode(code);
+        const basketDiscount = await this.basketRepository.findOne({
+            where: {
+                discountId: discount.id,
+            },
+        });
+        if (!basketDiscount)
+            throw new common_1.BadRequestException("Not found discount in basket");
+        await this.basketRepository.delete({ discountId: discount.id, userId });
+        return {
+            message: "You deleted discount code successfully",
+        };
+    }
 };
 exports.BasketService = BasketService;
 exports.BasketService = BasketService = __decorate([

@@ -25,6 +25,6 @@ class DiscountBasketDto {
 exports.DiscountBasketDto = DiscountBasketDto;
 __decorate([
     (0, swagger_1.ApiProperty)(),
-    __metadata("design:type", Number)
+    __metadata("design:type", String)
 ], DiscountBasketDto.prototype, "code", void 0);
 //# sourceMappingURL=basket.dto.js.map

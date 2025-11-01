@@ -1,4 +1,4 @@
-import { BasketDto } from './dto/basket.dto';
+import { BasketDto, DiscountBasketDto } from './dto/basket.dto';
 import { UserBasketEntity } from './entities/basket.entity';
 import { Repository } from 'typeorm';
 import { Request } from 'express';
@@ -14,12 +14,17 @@ export declare class BasketService {
     constructor(basketRepository: Repository<UserBasketEntity>, discountRepository: Repository<DiscountEntity>, menuService: MenuService, discountService: DiscountService, req: Request);
     findAll(): string;
     findOne(id: number): string;
-    remove(id: number): string;
     addToBasket(createBasketDto: BasketDto): Promise<{
         message: string;
     }>;
-    removeFromBasket(): Promise<void>;
+    removeFromBasket(basketDto: BasketDto): Promise<{
+        message: string;
+    }>;
     getBasket(): Promise<void>;
-    addDiscount(): Promise<void>;
-    removeDiscount(): Promise<void>;
+    addDiscount(discountDto: DiscountBasketDto): Promise<{
+        message: string;
+    }>;
+    removeDiscount(discountDto: DiscountBasketDto): Promise<{
+        message: string;
+    }>;
 }

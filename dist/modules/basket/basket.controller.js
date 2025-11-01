@@ -15,10 +15,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.BasketController = void 0;
 const common_1 = require("@nestjs/common");
 const basket_service_1 = require("./basket.service");
+const swagger_1 = require("@nestjs/swagger");
+const basket_dto_1 = require("./dto/basket.dto");
+const auth_decorator_1 = require("../../common/decorators/auth.decorator");
+const form_type_enum_1 = require("../../common/enums/form-type.enum");
 let BasketController = class BasketController {
     basketService;
     constructor(basketService) {
         this.basketService = basketService;
+    }
+    addToBasket(createBasketDto) {
+        return this.basketService.addToBasket(createBasketDto);
     }
     findAll() {
         return this.basketService.findAll();
@@ -26,11 +33,30 @@ let BasketController = class BasketController {
     findOne(id) {
         return this.basketService.findOne(+id);
     }
-    remove(id) {
-        return this.basketService.remove(+id);
+    remove(basketDto) {
+        try {
+            return this.basketService.removeFromBasket(basketDto);
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+    addDiscountToBasket(discountDto) {
+        return this.basketService.addDiscount(discountDto);
+    }
+    removeDiscountFromBasket(discountDto) {
+        return this.basketService.removeDiscount(discountDto);
     }
 };
 exports.BasketController = BasketController;
+__decorate([
+    (0, common_1.Post)(),
+    (0, swagger_1.ApiConsumes)(form_type_enum_1.FormType.UrlEncoded, form_type_enum_1.FormType.JSON),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [basket_dto_1.BasketDto]),
+    __metadata("design:returntype", void 0)
+], BasketController.prototype, "addToBasket", null);
 __decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),
@@ -48,11 +74,29 @@ __decorate([
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [basket_dto_1.BasketDto]),
     __metadata("design:returntype", void 0)
 ], BasketController.prototype, "remove", null);
+__decorate([
+    (0, common_1.Post)("/discount"),
+    (0, swagger_1.ApiConsumes)(form_type_enum_1.FormType.UrlEncoded, form_type_enum_1.FormType.JSON),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [basket_dto_1.DiscountBasketDto]),
+    __metadata("design:returntype", void 0)
+], BasketController.prototype, "addDiscountToBasket", null);
+__decorate([
+    (0, common_1.Delete)("/discount"),
+    (0, swagger_1.ApiConsumes)(form_type_enum_1.FormType.UrlEncoded, form_type_enum_1.FormType.JSON),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [basket_dto_1.DiscountBasketDto]),
+    __metadata("design:returntype", void 0)
+], BasketController.prototype, "removeDiscountFromBasket", null);
 exports.BasketController = BasketController = __decorate([
     (0, common_1.Controller)('basket'),
+    (0, swagger_1.ApiTags)('Basket'),
+    (0, auth_decorator_1.UserAuth)(),
     __metadata("design:paramtypes", [basket_service_1.BasketService])
 ], BasketController);
 //# sourceMappingURL=basket.controller.js.map
